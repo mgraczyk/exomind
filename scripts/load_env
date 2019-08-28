@@ -1,0 +1,1 @@
+aws s3 cp s3://fs.exomind.com/environment/.env.prod.sh /home/ec2-user/.env.prod.sh

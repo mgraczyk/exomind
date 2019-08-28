@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>{% if review_id %}Edit Review{% else %}Create a new review{% endif %}</h3>
+
+<form method="POST">
+  {% csrf_token %}
+  {{ form }}
+  <button
+    class="btn waves-effect waves-light"
+    type="submit"
+    name="action">
+    {% if review_id %}Save{% else %}Submit{% endif %}
+  </button>
+</form>
+
+{% endblock %}

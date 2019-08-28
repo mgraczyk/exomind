@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-54147021-4"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-54147021-4');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="exomind">
+    <title>exomind</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-reboot.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/materialize.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/exomind.css" />
+  </head>
+
+  <body>
+    <div class="row">
+      <nav>
+        <div class="EXM-sidenav">
+          <input
+            id="sidenav-toggle"
+            class="sidenav-toggle"
+            type="checkbox"></input>
+          <label for="sidenav-toggle" class="sidenav-backdrop"></label>
+          <label for="sidenav-toggle">
+            <div class="sidenav-menu-button btn-flat EXM-sidenav-menu-button"><i style="width: 24px" class="material-icons">menu</i></div>
+          </label>
+          <ul class="sidenav-content materialize-red lighten-2">
+            <li><h5 style="padding: 0px 15px">
+              {% if me.id %}
+                Welcome @{{me.username}}
+              {% else %}
+                Welcome to Exomind!
+              {% endif %}
+            </h5></li>
+            <li><hr></li>
+            <li><a href="/">Home</a></li>
+
+            {% if me.id %}
+              <li><a href="/profiles/{{me.id}}">Your Profile</a></li>
+              <li><a href="/reviews/new">Create Review</a></li>
+              <li><hr></li>
+
+              <li>
+                <form action="/logout" method="POST">
+                  {% csrf_token %}
+                  <button class="btn-flat EXM-link-button" type="submit">Logout</button></a>
+                </form>
+              </li>
+            {% else %}
+              <li>{% include "social_login_buttons.html" %}</li>
+            {% endif %}
+          </ul>
+          <div class="brand-logo">{% firstof title "Exomind" %}</div>
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+  <script>
+    window.onload = function() {
+      function isInputField(element) {
+        var tagName = element.tagName.toLowerCase();
+        return tagName === 'textarea' || tagName === 'input';
+      }
+
+      function startNewReview(url) {
+        window.location.href = '/reviews/new?url=' + url;
+      }
+
+      document.onpaste = function(evt) {
+        if (isInputField(evt.target)) {
+          return;
+        }
+
+        startNewReview((evt.clipboardData || window.clipboardData).getData('Text'));
+      }
+
+      document.ondragover = function(evt) {
+        evt.preventDefault();
+      }
+
+      document.ondrop = function(evt) {
+        if (isInputField(evt.target)) {
+          return;
+        }
+        startNewReview((evt.dataTransfer || window.dataTransfer).getData('Text'));
+        evt.preventDefault();
+      }
+    }
+  </script>
+</html>

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="collection with-header">
+<div class="collection-header EXM-title-right-button">
+  <h3>@{{profile_user.username}}'s Reviews</h3>
+  {% if me.id == profile_user.id %}
+    <a
+      href="{% url 'new_review' %}"
+      class="btn-floating btn-large waves-effect waves-light red">
+      <i class="large material-icons">add</i>
+    </a>
+  {% endif %}
+</div>
+{% for review in reviews %}
+  {% include "review_item.html" with me=me review=review %}
+{% empty %}
+  <div class="collection-item"><h5>No reviews yet!</h5></div>
+{% endfor %}
+</div>
+
+{% endblock %}

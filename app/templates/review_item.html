@@ -1,0 +1,24 @@
+{% load humanize %}
+
+<div class="collection-item avatar">
+  <i class="material-icons circle green">library_books</i>
+  <a class="title" href="{% url 'full_review' review_id=review.id %}">
+    <em>{% if review.name %}{{review.name}}{%else%}no title{%endif%}</em>
+  </a>
+  <p>
+    <a href="{{review.url}}" target="_blank" rel="noopener">
+      {{ review.short_url }}
+    </a>
+    <br>
+    Created by
+    <a href="/profiles/{{review.user.id}}">@{{review.user.username}}</a>
+    {{ review.created_at|naturaltime }}
+  </p>
+  <span class="secondary-content">
+    Rating: {{review.rating}} &nbsp;
+
+    {% if review.user.id == me.id %}
+      <a href="{% url 'manage_review' review_id=review.id %}" class="btn">Edit</a>
+    {% endif %}
+  </span>
+</div>
