@@ -1,0 +1,77 @@
+.EXM-title-right-button {
+  display: flex;
+  align-items: center;
+}
+.EXM-title-right-button :first-child {
+  flex-grow: 1;
+}
+
+.EXM-sidenav .sidenav-toggle {
+  display: none;
+}
+.EXM-sidenav .sidenav-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+  transition: opacity 0.2s ease-in;
+}
+.EXM-sidenav .sidenav-toggle:checked ~ .sidenav-backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9;
+  visibility: visible;
+  opacity: 1;
+}
+
+.EXM-sidenav .sidenav-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  max-width: 80%;
+  z-index: 90;
+  visibility: hidden;
+  transform: translateX(-105%);
+  transition: transform 0.2s ease;
+}
+.EXM-sidenav .sidenav-toggle:checked ~ .sidenav-content {
+  visibility: visible;
+  transform: translateX(0%);
+  transition: transform 0.2s ease;
+}
+
+.EXM-sidenav .sidenav-content li {
+  width: 100%;
+}
+.EXM-link-button {
+  width: 100%;
+  display: block;
+  color: #fff;
+  text-transform: unset;
+  text-align: left;
+  padding: 0 15px;
+  height: 64px;
+}
+.EXM-link-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.EXM-sidenav hr {
+  border-color: #ee6e73;
+}
+.EXM-btn-social-signin {
+  width: 200px;
+}
+.EXM-btn-social-signin__google {
+  width: 204px;
+}
+.EXM-sidenav-menu-button {
+  height: unset; 
+}
+.btn-floating {
+  flex-shrink: 0;
+}
