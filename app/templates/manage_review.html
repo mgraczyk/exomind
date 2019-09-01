@@ -19,9 +19,22 @@
   <button
     class="btn waves-effect waves-light"
     type="submit"
-    name="action">
+    name="action"
+    value="submit"
+    >
     {% if review_id %}Save{% else %}Submit{% endif %}
   </button>
+
+  {% if review_id %}
+  <button
+    class="btn waves-effect waves-light"
+    type="submit"
+    name="action"
+    value="delete"
+    >
+    Delete
+  </button>
+  {% endif %}
 </form>
 
 {% endblock %}

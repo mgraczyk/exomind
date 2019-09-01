@@ -30,8 +30,14 @@ def logout_view(request):
 def manage_review_view(request, review_id=None):
   if request.method in CREATE_OR_UPDATE_METHODS:
     data = request.POST
-    review, _ = Review.create_or_update(request.user, data, id=review_id)
-    return HttpResponseRedirect('/?submittedReview={}'.format(review.id))
+    if data.get('action') == 'delete':
+      Review.objects.filter(user=request.user, id=review_id).delete()
+      next_url = '/'
+    else:
+      review, _ = Review.create_or_update(request.user, data, id=review_id)
+      next_url = '/?submittedReview={}'.format(review.id)
+
+    return HttpResponseRedirect(next_url)
   else:
     if review_id:
       review = Review.api_format_from_id(request.user, review_id)
@@ -39,7 +45,10 @@ def manage_review_view(request, review_id=None):
       # pre-populate fields from url parameters.
       review = {k: v for k, v in request.GET.items() if k in {'url', 'rating', 'text'}}
 
-  return render_with_globals(request, 'manage_review.html', {'review': review, 'review_id': review_id})
+  return render_with_globals(request, 'manage_review.html', {
+      'review': review,
+      'review_id': review_id
+  })
 
 
 def profile_view(request, user_id, review_id=None):
