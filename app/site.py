@@ -3,7 +3,7 @@ from django.contrib.auth import logout
 from django.shortcuts import render
 
 from app.users import User
-from app.review import Review, ReviewForm
+from app.review import Review
 
 CREATE_OR_UPDATE_METHODS = {'POST', 'PUT', 'PATCH'}
 
@@ -29,20 +29,17 @@ def logout_view(request):
 
 def manage_review_view(request, review_id=None):
   if request.method in CREATE_OR_UPDATE_METHODS:
-    form = ReviewForm(request.POST)
-    if form.is_valid():
-      review, _ = Review.create_or_update(request.user, form.cleaned_data, id=review_id)
-      if not review_id:
-        return HttpResponseRedirect('/reviews/{}'.format(review.id))
+    data = request.POST
+    review, _ = Review.create_or_update(request.user, data, id=review_id)
+    return HttpResponseRedirect('/?submittedReview={}'.format(review.id))
   else:
     if review_id:
-      form = ReviewForm.from_review_id(request.user, review_id)
+      review = Review.api_format_from_id(request.user, review_id)
     else:
       # pre-populate fields from url parameters.
-      form = ReviewForm(
-          initial={k: v for k, v in request.GET.items() if k in {'url', 'rating', 'text'}})
+      review = {k: v for k, v in request.GET.items() if k in {'url', 'rating', 'text'}}
 
-  return render_with_globals(request, 'manage_review.html', {'form': form, 'review_id': review_id})
+  return render_with_globals(request, 'manage_review.html', {'review': review, 'review_id': review_id})
 
 
 def profile_view(request, user_id, review_id=None):

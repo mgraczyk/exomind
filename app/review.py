@@ -58,6 +58,10 @@ class Review(models.Model):
 
       return cls.objects.update_or_create(**kwargs)
 
+  @classmethod
+  def api_format_from_id(cls, user, review_id):
+    return Review.objects.get(user=user, id=review_id).get_api_format()
+
   @property
   def url(self):
     return self.reviewable.url
@@ -76,23 +80,3 @@ class Review(models.Model):
         'rating': self.rating,
         'text': self.text,
     }
-
-
-class ReviewForm(Form):
-  url = forms.URLField(label="URL of the thing you're reviewing", required=True)
-  name = forms.CharField(label="Optional Name of the thing you're reviewing", required=False)
-
-  rating = forms.FloatField(
-      label='Overall Rating. How interesting was it?',
-      required=False,
-      min_value=0,
-      max_value=5,
-      widget=RangeInput(attrs={'step': "0.5"}))
-
-  text = forms.CharField(
-      label='Optional summary or thoughts', widget=forms.Textarea, required=False)
-
-  @classmethod
-  def from_review_id(cls, user, review_id):
-    api_format = Review.objects.get(user=user, id=review_id).get_api_format()
-    return cls(api_format)

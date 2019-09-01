@@ -4,7 +4,18 @@
 
 <form method="POST">
   {% csrf_token %}
-  {{ form }}
+  <label for="id_url">URL of the thing you&#39;re reviewing:</label>
+  <input value="{{review.url}}" type="url" name="url" required id="id_url">
+
+  <label for="id_name">Optional Name of the thing you&#39;re reviewing:</label>
+  <input value="{{review.name}}" type="text" name="name" id="id_name">
+
+  <label for="id_rating">Overall Rating. How interesting was it?</label>
+  <input value="{{review.rating}}" type="range" name="rating" step="0.5" min="0" max="5" id="id_rating">
+
+  <label for="id_text">Optional summary or thoughts:</label>
+  <textarea value="{{review.text}}" name="text" cols="40" rows="10" id="id_text"></textarea>
+
   <button
     class="btn waves-effect waves-light"
     type="submit"
