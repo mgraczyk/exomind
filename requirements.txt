@@ -1,5 +1,5 @@
 # dependencies common to all environments
-Django==2.2.4
+Django==2.2.5
 pytz==2019.2
 dj-database-url==0.5.0
 raven==6.10.0

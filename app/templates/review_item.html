@@ -12,7 +12,7 @@
     <br>
     Created by
     <a href="/profiles/{{review.user.id}}">@{{review.user.username}}</a>
-    {{ review.created_at|naturaltime }}
+    {{ review.time|naturaltime }}
   </p>
   <span class="secondary-content">
     Rating: {{review.rating}} &nbsp;
