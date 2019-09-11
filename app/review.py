@@ -49,20 +49,10 @@ class Review(models.Model):
 
       return cls.objects.update_or_create(**kwargs)
 
-  @classmethod
-  def api_format_from_id(cls, user, review_id):
-    return Review.objects.get(user=user, id=review_id).get_api_format()
-
   @property
   def url(self):
     return self.reviewable.url
 
-  def get_api_format(self):
-    return {
-        'id': self.id,
-        'url': self.reviewable.url,
-        'name': self.name,
-        'time': self.time,
-        'rating': self.rating,
-        'text': self.text,
-    }
+  @property
+  def image_url(self):
+    return self.reviewable.image_url

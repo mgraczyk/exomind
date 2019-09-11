@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 from app.users import User
 from app.review import Review
+from utils import AttributeDict
 
 CREATE_OR_UPDATE_METHODS = {'POST', 'PUT', 'PATCH'}
 
@@ -39,10 +40,14 @@ def manage_review_view(request, review_id=None):
     return HttpResponseRedirect(next_url)
   else:
     if review_id:
-      review = Review.api_format_from_id(request.user, review_id)
+      review = Review.objects.get(user=request.user, id=review_id)
     else:
       # pre-populate fields from url parameters.
-      review = {k: v for k, v in request.GET.items() if k in {'url', 'rating', 'text'}}
+      review = AttributeDict({
+          k: v
+          for k, v in request.GET.items()
+          if k in {'url', 'rating', 'text'}
+      })
 
   return render_with_globals(request, 'manage_review.html', {
       'review': review,

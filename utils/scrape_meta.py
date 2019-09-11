@@ -15,7 +15,9 @@ def get_meta_for_page(url):
       'title': title,
   }
   meta.update({
-      k: meta_by_property[k].attrs.get('content') for k in ('og:title',) if k in meta_by_property
+      k: meta_by_property[k].attrs.get('content')
+      for k in ('og:title', 'og:image')
+      if k in meta_by_property
   })
 
   return meta
@@ -27,3 +29,8 @@ def get_good_title_for_page(url):
     return meta.get('title', '')
   else:
     return meta.get('og:title', '')
+
+
+def get_good_image_for_page(url):
+  meta = get_meta_for_page(url)
+  return meta.get('og:image')

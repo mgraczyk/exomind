@@ -2,8 +2,8 @@ import os
 from tqdm import tqdm
 from django.core.management.base import BaseCommand
 
-from utils.scrape_meta import get_good_title_for_page
-from app.models import Review
+from utils.scrape_meta import get_good_image_for_page, get_good_title_for_page
+from app.models import Review, Reviewable
 
 
 class Command(BaseCommand):
@@ -22,3 +22,13 @@ class Command(BaseCommand):
       good_title = get_good_title_for_page(review.url)
       review.name = good_title
       review.save(update_fields=['name'])
+
+    reviewables_without_image = list(
+        Reviewable.objects.filter(image_url__isnull=True))
+    print('adding images to {} reviewables'.format(
+        len(reviewables_without_image)))
+    for reviewable in tqdm(reviewables_without_image):
+      good_image = get_good_image_for_page(reviewable.url)
+      if good_image:
+        reviewable.image_url = good_image
+        reviewable.save(update_fields=['image_url'])

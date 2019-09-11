@@ -1,11 +1,11 @@
-time,url,rating, text
-8/17/2019 14:23:06,https://theamericanscholar.org/black-lives-and-the-boston-massacre/,4,
-8/17/2019 14:23:12,http://cognitivemedium.com/srs-mathematics,3.5,
-8/17/2019 14:23:31,https://surfsec.wordpress.com/2013/01/06/circumventing-windows-rts-code-integrity-mechanism,2.5,
-8/17/2019 14:23:32,https://googleprojectzero.blogspot.com/2019/08/the-fully-remote-attack-surface-of.html,3,
-8/19/2019 17:54:33,https://engineering.fb.com/security/zoncolan/,3,
-8/19/2019 21:13:04,https://www.popehat.com/2016/06/14/lawsplainer-its-not-rico-dammit/,4,
-8/25/2019 16:39:20,https://www.quantamagazine.org/physicists-aim-to-classify-all-possible-phases-of-matter-20180103/,1,I lack the necessary background to get much from this article
-8/25/2019 17:21:29,http://www.abigailsee.com/2019/08/13/what-makes-a-good-conversation.html,4,"The most interesting part to me was that some changes increased ""engagingness"" while decreasing ""humanness"". In other words, there were was to make chitchat bots enjoyable to talk to (nearly human level) which made them seem less human. However, this can probably be mostly explained by the fact that the humans were ""paid crowdworkers"", and the authore suspects that ""paid crowdworkers are not very engaging conversationalists""."
-8/26/2019 15:52:22,https://www.cockroachlabs.com/blog/building-cost-based-sql-optimizer/,2,
-8/26/2019 17:08:44,https://www.theinformation.com/articles/waymos-backseat-drivers-confidential-data-reveals-self-driving-taxi-hurdles?utm_medium=unlock&utm_source=hackernews,2.5,
+time,url,rating,text,image_url
+8/17/2019 14:23:06,https://theamericanscholar.org/black-lives-and-the-boston-massacre/,4,,
+8/17/2019 14:23:12,http://cognitivemedium.com/srs-mathematics,3.5,,
+8/17/2019 14:23:31,https://surfsec.wordpress.com/2013/01/06/circumventing-windows-rts-code-integrity-mechanism,2.5,,
+8/17/2019 14:23:32,https://googleprojectzero.blogspot.com/2019/08/the-fully-remote-attack-surface-of.html,3,,
+8/19/2019 17:54:33,https://engineering.fb.com/security/zoncolan/,3,,
+8/19/2019 21:13:04,https://www.popehat.com/2016/06/14/lawsplainer-its-not-rico-dammit/,4,,
+8/25/2019 16:39:20,https://www.quantamagazine.org/physicists-aim-to-classify-all-possible-phases-of-matter-20180103/,1,I lack the necessary background to get much from this article,
+8/25/2019 17:21:29,http://www.abigailsee.com/2019/08/13/what-makes-a-good-conversation.html,4,"The most interesting part to me was that some changes increased ""engagingness"" while decreasing ""humanness"". In other words, there were was to make chitchat bots enjoyable to talk to (nearly human level) which made them seem less human. However, this can probably be mostly explained by the fact that the humans were ""paid crowdworkers"", and the authore suspects that ""paid crowdworkers are not very engaging conversationalists"".",
+8/26/2019 15:52:22,https://www.cockroachlabs.com/blog/building-cost-based-sql-optimizer/,2,,
+8/26/2019 17:08:44,https://www.theinformation.com/articles/waymos-backseat-drivers-confidential-data-reveals-self-driving-taxi-hurdles?utm_medium=unlock&utm_source=hackernews,2.5,,https://dmxvlyap9srmn.cloudfront.net/production/articles/3820/small_f146f8c2-36fa-42c2-b5cb-73f964ab395c.jpg
