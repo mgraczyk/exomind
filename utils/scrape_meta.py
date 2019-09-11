@@ -2,10 +2,24 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def get_meta_for_page(url):
-  r = requests.get(url, allow_redirects=True)
-  r.raise_for_status()
-  soup = BeautifulSoup(r.content, features='html.parser')
+class PageCache(dict):
+
+  @classmethod
+  def fetch_content(cls, url, context=None):
+    if context and url in context:
+      return context[url]
+
+    r = requests.get(url, allow_redirects=True)
+    r.raise_for_status()
+    if context:
+      context[url] = r.content
+
+    return r.content
+
+
+def get_meta_for_page(url, context=None):
+  soup = BeautifulSoup(
+      PageCache.fetch_content(url, context), features='html.parser')
 
   title = soup.find("title").text
   meta_tags = soup.find_all("meta")
@@ -23,14 +37,14 @@ def get_meta_for_page(url):
   return meta
 
 
-def get_good_title_for_page(url):
-  meta = get_meta_for_page(url)
+def get_good_title_for_page(url, context=None):
+  meta = get_meta_for_page(url, context)
   if len(meta.get('title', '')) < len(meta.get('og:title', '')):
     return meta.get('title', '')
   else:
     return meta.get('og:title', '')
 
 
-def get_good_image_for_page(url):
-  meta = get_meta_for_page(url)
+def get_good_image_for_page(url, context=None):
+  meta = get_meta_for_page(url, context)
   return meta.get('og:image')

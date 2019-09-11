@@ -33,7 +33,6 @@ class Review(models.Model):
       reviewable = Reviewable.get_or_create(data)
       kwargs = {
           'user': user,
-          'reviewable': reviewable,
           'defaults': {
               'name': data.get('name'),
               'rating': data.get('rating'),
@@ -44,6 +43,10 @@ class Review(models.Model):
       # Check for url and user when id is None
       if id:
         kwargs['id'] = id
+        kwargs['defaults']['reviewable'] = reviewable
+      else:
+        kwargs['reviewable'] = reviewable
+
       if data.get('time'):
         kwargs['defaults']['time'] = data['time']
 
