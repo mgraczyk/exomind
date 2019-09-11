@@ -3,7 +3,7 @@ from tqdm import tqdm
 from utils.scrape_meta import (PageCache, get_good_image_for_page,
                                get_good_title_for_page)
 from app.models import Review, Reviewable
-from logger import logger
+from app.logger import logger
 
 
 def maybe_filter(x, **kwargs):
