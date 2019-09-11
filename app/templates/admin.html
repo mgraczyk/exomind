@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if me.is_admin %}
+
+<h4>Admin Controls</h4>
+<div>
+  <form method="POST" action="{% url 'admin_scrape' %}">
+    {% csrf_token %}
+    <input type="text" name="review_id" placeholder="review id (optional)"></input>
+    <button type="submit">Run Scraper</button>
+  </form>
+</div>
+
+{% else %}
+<h4>Please log in as an admin to continue</h4>
+
+{% endif %}
+
+{% endblock %}

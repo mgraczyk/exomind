@@ -23,6 +23,10 @@ class User(AbstractBaseUser):
   username = CIEmailField(max_length=255, unique=True)
 
   is_active = True
-  is_admin = False
 
   objects = UserManager()
+
+  @property
+  def is_admin(self):
+    # TODO(mgraczyk): Fix
+    return self.email.lower() == 'michael@mgraczyk.com'
