@@ -14,7 +14,7 @@
   <input value="{{review.rating}}" type="range" name="rating" step="0.5" min="0" max="5" id="id_rating">
 
   <label for="id_text">Optional summary or thoughts:</label>
-  <textarea value="{{review.text}}" name="text" cols="40" rows="10" id="id_text"></textarea>
+  <textarea name="text" cols="40" rows="10" id="id_text">{{review.text}}</textarea>
 
   <button
     class="btn waves-effect waves-light"
