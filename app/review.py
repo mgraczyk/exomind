@@ -8,15 +8,6 @@ from utils.fields import B64IDField
 from app.reviewable import Reviewable
 
 
-
-def remove_any_from_start(s, *args):
-  for a in args:
-    if s.startswith(a):
-      return s[len(a):]
-
-  return s
-
-
 class RangeInput(forms.NumberInput):
   input_type = 'range'
 
@@ -65,11 +56,6 @@ class Review(models.Model):
   @property
   def url(self):
     return self.reviewable.url
-
-  @property
-  def short_url(self):
-    return remove_any_from_start(remove_any_from_start(self.url, 'http://', 'https://'),
-                                 'www.')[:100]
 
   def get_api_format(self):
     return {

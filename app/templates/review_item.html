@@ -1,24 +1,31 @@
 {% load humanize %}
+{% load tags %}
 
-<div class="collection-item avatar">
-  <i class="material-icons circle green">library_books</i>
-  <a class="title" href="{% url 'full_review' review_id=review.id %}">
-    <em>{% if review.name %}{{review.name}}{%else%}no title{%endif%}</em>
-  </a>
-  <p>
-    <a href="{{review.url}}" target="_blank" rel="noopener">
-      {{ review.short_url }}
-    </a>
+<div class="collection-item EXM-review-item">
+  <div class="EXM-review-item__left">
+    {% if review.image_url %}
+      <img class="EXM-review-item__image" src="{{review.image_url}}" width=48 height=48></img>
+    {% else %}
+      <div class="EXM-review-item__image green">
+        <i class="material-icons">library_books</i>
+      </div>
+    {% endif %}
+    <div title="Rating {{review.rating}}">
+      <i class="material-icons tiny" style="word-spacing: -5px">{{review.rating|star_string}}</i>
+    </div>
+  </div>
+  <div class="EXM-review-item__right">
+    <h6><em>{% if review.name %}{{review.name}}{%else%}no
+        title{%endif%}</em></h6>
+    {{review.url|nice_urlize:60}}
     <br>
     Created by
     <a href="/profiles/{{review.user.id}}">@{{review.user.username}}</a>
     {{ review.time|naturaltime }}
-  </p>
-  <span class="secondary-content">
-    Rating: {{review.rating}} &nbsp;
-
+    <br>
+    <a class="title" href="{% url 'full_review' review_id=review.id %}">See More...</a>
     {% if review.user.id == me.id %}
-      <a href="{% url 'manage_review' review_id=review.id %}" class="btn">Edit</a>
+      &nbsp;&nbsp;<a href="{% url 'manage_review' review_id=review.id %}">Edit</a>
     {% endif %}
-  </span>
+  </div>
 </div>

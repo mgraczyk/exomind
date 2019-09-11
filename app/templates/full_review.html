@@ -2,6 +2,7 @@
 {% block content %}
 
 {% load humanize %}
+{% load tags %}
 
 <div>
   <h4>
@@ -10,17 +11,16 @@
   </a>
   </h4>
   <p>
-    <a href="{{review.url}}" target="_blank" rel="noopener">
-      {{ review.short_url }}
-    </a>
+    {{review.url|nice_urlize:60}}
     <br>
     Created by
     <a href="/profiles/{{review.user.id}}">@{{review.user.username}}</a>
-    {{ review.created_at|naturaltime }}
+    {{review.time|naturaltime }}
   </p>
-  <span>
-    Rating: {{review.rating}} &nbsp;
-  </span>
+  <div>Rating: {{review.rating}}</div>
+  <div title="Rating {{review.rating}}">
+    <i class="material-icons tiny" style="word-spacing: -5px">{{review.rating|star_string}}</i>
+  </div>
 
   <p>
     {{review.text}}

@@ -1,3 +1,7 @@
+.btn-floating {
+  flex-shrink: 0;
+}
+
 .EXM-title-right-button {
   display: flex;
   align-items: center;
@@ -72,6 +76,37 @@
 .EXM-sidenav-menu-button {
   height: unset; 
 }
-.btn-floating {
-  flex-shrink: 0;
+
+.collection .EXM-review-item.collection-item {
+  display: flex;
+  padding: 0;
+}
+
+.EXM-review-item__image {
+  width: 54px;
+  height: 54px;
+  border-radius: 10%;
+  margin: auto;
+  display: table;
+}
+.EXM-review-item__image i {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  color: #fff;
+}
+
+.EXM-review-item__left {
+  padding: 10px;
+  flex: 0 0 auto;
+}
+
+
+.EXM-review-item__right {
+  padding: 10px;
+  padding-left: 0;
+  flex: 0 1 auto;
+}
+.EXM-review-item__right h6 {
+  margin-top: 0px;
 }

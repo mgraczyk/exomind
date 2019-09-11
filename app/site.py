@@ -7,7 +7,6 @@ from app.review import Review
 
 CREATE_OR_UPDATE_METHODS = {'POST', 'PUT', 'PATCH'}
 
-
 def render_with_globals(request, template, context):
   context['me'] = request.user
   return render(request, template, context)
