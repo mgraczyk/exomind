@@ -110,3 +110,47 @@
 .EXM-review-item__right h6 {
   margin-top: 0px;
 }
+
+input.EXM-ratings-slider {
+  padding: 0 2px;
+  margin: 5px 0px;
+}
+
+input.EXM-ratings-slider ~ .EXM-ratings-ticks {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+input.EXM-ratings-slider ~ .EXM-ratings-ticks p {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 1px;
+  background: #D3D3D3;
+  height: 10px;
+  line-height: 40px;
+  margin: 0 0 20px 0;
+}
+
+.EXM-review-form.EXM-override input,
+.EXM-review-form.EXM-override textarea {
+  position: relative;
+  display: block;
+  margin-top: 3.0em;
+}
+
+.EXM-review-form.EXM-override label {
+  display: block;
+  position: relative;
+  top: -6.0em;
+  height: 0;
+}
+
+.EXM-review-form.EXM-override textarea + label {
+  top: -5.5em;
+}
+
+.EXM-review-form.EXM-override input[type=range] + label {
+  top: -3.5em;
+}

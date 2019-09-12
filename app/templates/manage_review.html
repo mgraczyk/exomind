@@ -2,19 +2,30 @@
 {% block content %}
 <h3>{% if review_id %}Edit Review{% else %}Create a new review{% endif %}</h3>
 
-<form method="POST">
+<form class="EXM-review-form EXM-override" method="POST">
   {% csrf_token %}
-  <label for="id_url">URL of the thing you&#39;re reviewing:</label>
   <input value="{{review.url}}" type="url" name="url" required id="id_url">
+  <label for="id_url">URL of the thing you&#39;re reviewing:</label>
 
-  <label for="id_name">Optional Name of the thing you&#39;re reviewing:</label>
   <input value="{{review.name}}" type="text" name="name" id="id_name">
+  <label for="id_name">Optional Name of the thing you&#39;re reviewing:</label>
 
-  <label for="id_rating">Overall Rating. How interesting was it?</label>
-  <input value="{{review.rating}}" type="range" name="rating" step="0.5" min="0" max="5" id="id_rating">
+  <div>
+    <input
+      value="{{review.rating}}"
+      class="EXM-ratings-slider"
+      type="range" name="rating"
+      step="0.5" min="0" max="5" id="id_rating"
+      >
+    <label for="id_rating">Overall Rating. How interesting was it?</label>
+    <div class="EXM-ratings-ticks">
+      <p>0.0</p><p>0.5</p><p>1.0</p><p>1.5</p><p>2.0</p><p>2.5</p>
+      <p>3.0</p><p>3.5</p><p>4.0</p><p>4.5</p><p>5.0</p>
+    </div>
+  </div>
 
-  <label for="id_text">Optional summary or thoughts:</label>
   <textarea name="text" cols="40" rows="10" id="id_text">{{review.text}}</textarea>
+  <label for="id_text">Optional summary or thoughts:</label>
 
   <button
     class="btn waves-effect waves-light"
