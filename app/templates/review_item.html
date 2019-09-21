@@ -3,13 +3,13 @@
 
 <div class="collection-item EXM-review-item">
   <div class="EXM-review-item__left">
-    {% if review.image_url %}
-      <img class="EXM-review-item__image" src="{{review.image_url}}" width=48 height=48></img>
-    {% else %}
-      <div class="EXM-review-item__image green">
-        <i class="material-icons">library_books</i>
+    <div class="EXM-review-item__image">
+      {% if review.image_url %}
+        <img src="{{review.image_url}}"></img>
+      {% else %}
+        <i class="material-icons green">library_books</i>
+      {% endif %}
       </div>
-    {% endif %}
     <div title="Rating {{review.rating}}">
       <i class="material-icons tiny" style="word-spacing: -5px">{{review.rating|star_string}}</i>
     </div>
