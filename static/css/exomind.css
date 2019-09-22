@@ -118,6 +118,27 @@
   margin-top: 0px;
 }
 
+.EXM-review-form__container {
+  position: relative;
+  display: block;
+  padding-top: 2.5em;
+}
+
+.EXM-review-form__container label {
+  position: absolute;
+  top: 1.5em;
+  height: 0;
+}
+
+.EXM-review-form__container textarea:focus + label,
+.EXM-review-form__container input[type=range]:focus + label {
+  color: #26a69a;
+}
+
+ {
+  color: #26a69a;
+}
+
 input.EXM-ratings-slider {
   padding: 0 2px;
   margin: 5px 0px;
@@ -138,26 +159,4 @@ input.EXM-ratings-slider ~ .EXM-ratings-ticks p {
   height: 10px;
   line-height: 40px;
   margin: 0 0 20px 0;
-}
-
-.EXM-review-form.EXM-override input,
-.EXM-review-form.EXM-override textarea {
-  position: relative;
-  display: block;
-  margin-top: 3.0em;
-}
-
-.EXM-review-form.EXM-override label {
-  display: block;
-  position: relative;
-  top: -6.0em;
-  height: 0;
-}
-
-.EXM-review-form.EXM-override textarea + label {
-  top: -5.5em;
-}
-
-.EXM-review-form.EXM-override input[type=range] + label {
-  top: -3.5em;
 }

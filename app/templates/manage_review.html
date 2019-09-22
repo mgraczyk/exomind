@@ -4,13 +4,17 @@
 
 <form class="EXM-review-form EXM-override" method="POST">
   {% csrf_token %}
-  <input value="{{review.url}}" type="url" name="url" required id="id_url">
-  <label for="id_url">URL of the thing you&#39;re reviewing:</label>
+  <div class="EXM-review-form__container">
+    <input value="{{review.url}}" type="url" name="url" required id="id_url">
+    <label for="id_url">URL of the thing you&#39;re reviewing:</label>
+  </div>
 
-  <input value="{{review.name}}" type="text" name="name" id="id_name">
-  <label for="id_name">Optional Name of the thing you&#39;re reviewing:</label>
+  <div class="EXM-review-form__container">
+    <input value="{{review.name}}" type="text" name="name" id="id_name">
+    <label for="id_name">Optional Name of the thing you&#39;re reviewing:</label>
+  </div>
 
-  <div>
+  <div class="EXM-review-form__container">
     <input
       value="{{review.rating}}"
       class="EXM-ratings-slider"
@@ -24,8 +28,10 @@
     </div>
   </div>
 
-  <textarea name="text" cols="40" rows="10" id="id_text">{{review.text}}</textarea>
-  <label for="id_text">Optional summary or thoughts:</label>
+  <div class="EXM-review-form__container">
+    <textarea name="text" cols="40" rows="10" id="id_text" style="height: 200px">{{review.text}}</textarea>
+    <label for="id_text">Optional summary or thoughts:</label>
+  </div>
 
   <button
     class="btn waves-effect waves-light"
