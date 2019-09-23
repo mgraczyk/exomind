@@ -35,7 +35,7 @@ class Review(models.Model):
           'user': user,
           'defaults': {
               'name': data.get('name'),
-              'rating': data.get('rating'),
+              'rating': None if data.get('no_rating') == 'on' else data.get('rating'),
               'text': data.get('text', ''),
           }
       }

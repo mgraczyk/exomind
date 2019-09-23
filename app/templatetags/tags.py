@@ -27,6 +27,9 @@ def nice_urlize(value, limit=None):
 
 @register.filter(is_safe=True)
 def star_string(value):
+  if value is None:
+    return ''
+
   double_value = int(2 * min(10., max(0., float(value))))
 
   return '{}{}{}'.format('star ' * (double_value // 2),

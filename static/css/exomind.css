@@ -135,13 +135,14 @@
   color: #26a69a;
 }
 
- {
-  color: #26a69a;
-}
-
 input.EXM-ratings-slider {
   padding: 0 2px;
   margin: 5px 0px;
+}
+
+input.EXM-ratings-slider:disabled,
+input.EXM-ratings-slider:disabled ~ .EXM-ratings-ticks {
+  opacity: 0.3;
 }
 
 input.EXM-ratings-slider ~ .EXM-ratings-ticks {

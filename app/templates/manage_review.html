@@ -16,7 +16,18 @@
 
   <div class="EXM-review-form__container">
     <input
+      class="EXM-ratings-slider"
+      type="checkbox"
+      {% if review.rating is None %}checked{% endif %}
+      name="no_rating"
+      id="id_has_rating"
+      style="opacity: unset; pointer-events: unset; position: unset"
+      onchange="this.form.rating.disabled=this.checked"
+      >
+    <label for="id_has_rating" style="position: unset">No Rating</label>
+    <input
       value="{{review.rating}}"
+      {% if review.rating is None %}disabled{% endif %}
       class="EXM-ratings-slider"
       type="range" name="rating"
       step="0.5" min="0" max="5" id="id_rating"
