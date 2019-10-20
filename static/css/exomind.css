@@ -119,19 +119,25 @@
 }
 
 .EXM-review-form__container {
-  position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column-reverse;
   padding-top: 2.5em;
 }
 
 .EXM-review-form__container label {
-  position: absolute;
-  top: 1.5em;
-  height: 0;
+  margin-bottom: 0;
 }
 
-.EXM-review-form__container textarea:focus + label,
-.EXM-review-form__container input[type=range]:focus + label {
+.EXM-review-form__container textarea {
+  margin-bottom: 1em;
+}
+
+.EXM-review-form__container textarea ~ label {
+  margin-bottom: 0.5em;
+}
+
+.EXM-review-form__container textarea:focus ~ label,
+.EXM-review-form__container input[type=range]:focus ~ label {
   color: #26a69a;
 }
 
@@ -145,13 +151,16 @@ input.EXM-ratings-slider:disabled ~ .EXM-ratings-ticks {
   opacity: 0.3;
 }
 
-input.EXM-ratings-slider ~ .EXM-ratings-ticks {
+.EXM-review-form__no-rating__container {
+  display: inline-block;
+}
+
+.EXM-ratings-ticks {
   display: flex;
   justify-content: space-between;
   padding: 0 10px;
 }
-
-input.EXM-ratings-slider ~ .EXM-ratings-ticks p {
+.EXM-ratings-ticks p {
   display: flex;
   justify-content: center;
   text-align: center;

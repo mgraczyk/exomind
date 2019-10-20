@@ -15,16 +15,10 @@
   </div>
 
   <div class="EXM-review-form__container">
-    <input
-      class="EXM-ratings-slider"
-      type="checkbox"
-      {% if review.rating is None %}checked{% endif %}
-      name="no_rating"
-      id="id_has_rating"
-      style="opacity: unset; pointer-events: unset; position: unset"
-      onchange="this.form.rating.disabled=this.checked"
-      >
-    <label for="id_has_rating" style="position: unset">No Rating</label>
+    <div class="EXM-ratings-ticks">
+      <p>0.0</p><p>0.5</p><p>1.0</p><p>1.5</p><p>2.0</p><p>2.5</p>
+      <p>3.0</p><p>3.5</p><p>4.0</p><p>4.5</p><p>5.0</p>
+    </div>
     <input
       value="{{review.rating}}"
       {% if review.rating is None %}disabled{% endif %}
@@ -32,11 +26,19 @@
       type="range" name="rating"
       step="0.5" min="0" max="5" id="id_rating"
       >
-    <label for="id_rating">Overall Rating. How interesting was it?</label>
-    <div class="EXM-ratings-ticks">
-      <p>0.0</p><p>0.5</p><p>1.0</p><p>1.5</p><p>2.0</p><p>2.5</p>
-      <p>3.0</p><p>3.5</p><p>4.0</p><p>4.5</p><p>5.0</p>
+    <div class="EXM-review-form__no-rating__container">
+      <input
+        class="EXM-ratings-slider"
+        type="checkbox"
+        {% if review.rating is None %}checked{% endif %}
+        name="no_rating"
+        id="id_has_rating"
+        style="opacity: unset; pointer-events: unset; position: unset"
+        onchange="this.form.rating.disabled=this.checked"
+        >
+      <label for="id_has_rating" style="position: unset">No Rating</label>
     </div>
+    <label for="id_rating">Overall Rating. How interesting was it?</label>
   </div>
 
   <div class="EXM-review-form__container">
