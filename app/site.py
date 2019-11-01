@@ -28,7 +28,7 @@ def logout_view(request):
 
 
 def manage_review_view(request, review_id=None):
-  if not user.id:
+  if not request.user.id:
     return HttpResponseRedirect('/login')
 
   if request.method in CREATE_OR_UPDATE_METHODS:
