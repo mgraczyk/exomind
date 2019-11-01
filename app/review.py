@@ -30,7 +30,7 @@ class Review(models.Model):
   @classmethod
   def create_or_update(cls, user, data, id):
     with transaction.atomic():
-      reviewable = Reviewable.get_or_create(data)
+      reviewable, _ = Reviewable.get_or_create(data)
       kwargs = {
           'user': user,
           'defaults': {

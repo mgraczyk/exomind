@@ -13,5 +13,4 @@ class Reviewable(models.Model):
   @classmethod
   def get_or_create(cls, data):
     return cls.objects.get_or_create(
-        url=data['url'],
-        defaults={'image_url': data.get('image_url') or None})[0]
+        url=data['url'], defaults={'image_url': data.get('image_url') or None})

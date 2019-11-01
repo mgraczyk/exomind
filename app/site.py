@@ -28,6 +28,9 @@ def logout_view(request):
 
 
 def manage_review_view(request, review_id=None):
+  if not user.id:
+    return HttpResponseRedirect('/login')
+
   if request.method in CREATE_OR_UPDATE_METHODS:
     data = request.POST
     if data.get('action') == 'delete':
