@@ -64,8 +64,11 @@ def manage_review_view(request, review_id=None):
 
 def profile_view(request, user_id, review_id=None):
   context = {
-      'reviews': Review.objects.filter(user_id=user_id).order_by('-time'),
-      'profile_user': User.objects.get(id=user_id),
+      'reviews':
+          Review.objects.select_related('user',
+                                        'reviewable').filter(user_id=user_id).order_by('-time'),
+      'profile_user':
+          User.objects.get(id=user_id),
   }
   return render_with_globals(request, 'profile.html', context)
 
