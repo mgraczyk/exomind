@@ -7,6 +7,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+SESSION_COOKIE_AGE = 31536000
+
 # https://devcenter.heroku.com/articles/getting-started-with-python#introduction
 if os.getenv('ENVIRONMENT') == 'development':
   DEBUG = True
@@ -144,6 +146,32 @@ RAVEN_CONFIG = {
 }
 
 ATOMIC_REQUESTS = False
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '[%(levelname)s:%(filename)s:%(lineno)d] %(message)s'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'WARNING'),
+        },
+        'exomind': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
 
 
 # Internationalization

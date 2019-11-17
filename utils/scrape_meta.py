@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from collections import defaultdict
 
 
 class PageCache(dict):
@@ -21,13 +22,15 @@ def get_meta_for_page(url, context=None):
   soup = BeautifulSoup(
       PageCache.fetch_content(url, context), features='html.parser')
 
-  title = soup.find("title").text
+  title_tag = soup.find("title")
+  title = title_tag.text if title_tag else ''
+
   meta_tags = soup.find_all("meta")
   meta_by_property = {tag.attrs.get('property'): tag for tag in meta_tags}
 
-  meta = {
+  meta = defaultdict(str, {
       'title': title,
-  }
+  })
   meta.update({
       k: meta_by_property[k].attrs.get('content')
       for k in ('og:title', 'og:image')
@@ -39,12 +42,13 @@ def get_meta_for_page(url, context=None):
 
 def get_good_title_for_page(url, context=None):
   meta = get_meta_for_page(url, context)
-  if len(meta.get('title', '')) < len(meta.get('og:title', '')):
-    return meta.get('title', '')
+
+  if meta['og:title'] and len(meta['og:title']) > len(meta['title']):
+    return meta['og:title']
   else:
-    return meta.get('og:title', '')
+    return meta['title']
 
 
 def get_good_image_for_page(url, context=None):
   meta = get_meta_for_page(url, context)
-  return meta.get('og:image')
+  return meta['og:image']

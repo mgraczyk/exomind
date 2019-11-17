@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import logout
 from django.shortcuts import render
 
+from app.fill_missing import fill_missing_review_data
 from app.users import User
 from app.review import Review
 from utils import AttributeDict
@@ -36,6 +37,9 @@ def manage_review_view(request, review_id=None):
     if data.get('action') == 'delete':
       Review.objects.filter(user=request.user, id=review_id).delete()
       next_url = '/'
+    if data.get('action') == 'autofill':
+      fill_missing_review_data(review_id)
+      next_url = request.path
     else:
       review, _ = Review.create_or_update(request.user, data, id=review_id)
       next_url = '/?submittedReview={}'.format(review.id)
@@ -75,6 +79,6 @@ def full_review_view(request, review_id):
 
 def feed_view(request):
   context = {
-      'reviews': Review.objects.select_related('user').order_by('-time'),
+      'reviews': Review.objects.select_related('user', 'reviewable').order_by('-time'),
   }
   return render_with_globals(request, 'feed.html', context)

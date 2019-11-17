@@ -8,6 +8,8 @@ class Reviewable(models.Model):
   id = B64IDField(primary_key=True, editable=False)
 
   url = models.URLField(max_length=4095, unique=True)
+
+  # TODO: Make this non-nullable
   image_url = models.URLField(max_length=32767, null=True, blank=True)
 
   @classmethod

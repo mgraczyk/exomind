@@ -1,6 +1,4 @@
-from django import forms
 from django.db import models, transaction
-from django.forms import Form
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 
@@ -8,15 +6,14 @@ from utils.fields import B64IDField
 from app.reviewable import Reviewable
 
 
-class RangeInput(forms.NumberInput):
-  input_type = 'range'
-
 
 class Review(models.Model):
   id = B64IDField(primary_key=True, editable=False)
 
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   reviewable = models.ForeignKey('app.reviewable', on_delete=models.PROTECT)
+
+  # TODO: Make this non-nullable
   name = models.TextField(max_length=200, null=True, blank=True)
 
   time = models.DateTimeField(auto_now_add=True, editable=False)
