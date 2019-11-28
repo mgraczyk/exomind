@@ -26,9 +26,24 @@
     {{review.text}}
   </p>
 
+  {% if review.reaction_data.explicit %}
+  Liked by
+  {% for reaction in review.reaction_data.explicit %}
+    <a href="/profiles/{{reaction.user_id}}">@{{reaction.username}}</a>
+    {% if not forloop.last %}, {% endif %}
+  {% endfor %}
+  <br>
+  {% endif %}
+
+  <form class="EXM-like-form" method="POST"
+        action="{% url 'react_to_review' review_id=review.id %}?full=1">
+    {% csrf_token %}
+    <button type="submit" class="btn-flat waves-effect waves-light hvr-gray">Like</button>
+  </form>
+
   {% if review.user.id == me.id %}
     <span>
-      <a href="{% url 'manage_review' review_id=review.id %}" class="btn">Edit</a>
+      <a href="{% url 'manage_review' review_id=review.id %}" class="btn-flat hvr-gray">Edit</a>
     </span>
   {% endif %}
 </div>

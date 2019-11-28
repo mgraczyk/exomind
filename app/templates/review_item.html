@@ -15,17 +15,31 @@
     </div>
   </div>
   <div class="EXM-review-item__right">
-    <h6><em>{% if review.name %}{{review.name}}{%else%}no
-        title{%endif%}</em></h6>
+    <h6><em>
+      {% if review.name %}{{review.name}}{%else%}no title{%endif%}
+    </em></h6>
     {{review.url|nice_urlize:60}}
     <br>
-    Created by
     <a href="/profiles/{{review.user.id}}">@{{review.user.username}}</a>
     {{ review.time|naturaltime }}
+
+    {% if review.reaction_data.explicit %}
     <br>
-    <a class="title" href="{% url 'full_review' review_id=review.id %}">See More...</a>
+    Liked by
+    {% for reaction in review.reaction_data.explicit %}
+      <a href="/profiles/{{reaction.user_id}}">@{{reaction.username}}</a>
+      {% if not forloop.last %}, {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <br>
+    <form class="EXM-like-form" method="POST" action="{% url 'react_to_review' review_id=review.id %}">
+      {% csrf_token %}
+      <button type="submit" class="btn-flat waves-effect waves-light hvr-gray">Like</button>
+    </form>
+    <a class="btn-flat hvr-gray" href="{% url 'full_review' review_id=review.id %}">See More...</a>
     {% if review.user.id == me.id %}
-      &nbsp;&nbsp;<a href="{% url 'manage_review' review_id=review.id %}">Edit</a>
+      &nbsp;&nbsp;<a class="btn-flat hvr-gray" href="{% url 'manage_review' review_id=review.id %}">Edit</a>
     {% endif %}
   </div>
 </div>

@@ -170,3 +170,11 @@ input.EXM-ratings-slider:disabled ~ .EXM-ratings-ticks {
   line-height: 40px;
   margin: 0 0 20px 0;
 }
+
+.EXM-like-form {
+  display: inline-block;
+}
+
+.hvr-gray:hover {
+  background: #D3D3D3;
+}

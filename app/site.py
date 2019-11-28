@@ -1,9 +1,11 @@
+from django.db import transaction
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import logout
 from django.shortcuts import render
 
 from app.fill_missing import fill_missing_review_data
 from app.users import User
+from app.reactions import Reaction
 from app.review import Review
 from utils import AttributeDict
 
@@ -64,24 +66,41 @@ def manage_review_view(request, review_id=None):
 
 def profile_view(request, user_id, review_id=None):
   context = {
-      'reviews':
-          Review.objects.select_related('user',
-                                        'reviewable').filter(user_id=user_id).order_by('-time'),
-      'profile_user':
-          User.objects.get(id=user_id),
+      'reviews': Review.objects.with_me_data(user_id=user_id),
+      'profile_user': User.objects.get(id=user_id),
   }
   return render_with_globals(request, 'profile.html', context)
 
 
 def full_review_view(request, review_id):
   context = {
-      'review': Review.objects.get(id=review_id),
+      'review': Review.objects.with_me_data(id=review_id)[0],
   }
   return render_with_globals(request, 'full_review.html', context)
 
 
 def feed_view(request):
   context = {
-      'reviews': Review.objects.select_related('user', 'reviewable').order_by('-time'),
+      'reviews': Review.objects.with_me_data(me_id=request.user.id),
   }
+
   return render_with_globals(request, 'feed.html', context)
+
+def react_to_review_view(request, review_id):
+  if request.user.id is None:
+    return HttpResponseRedirect('/login')
+
+  with transaction.atomic():
+    my_reactions_query = Reaction.objects.filter(user_id=request.user.id, entity_id=review_id)
+    if my_reactions_query.exists():
+      my_reactions_query.delete()
+    else:
+      my_reactions_query.update_or_create(
+          user_id=request.user.id, entity_id=review_id, defaults={"type": 1})
+
+  if request.GET.get('full'):
+    next_url = f'/reviews/{review_id}'
+  else:
+    next_url = f'/?likedReview={review_id}'
+
+  return HttpResponseRedirect(next_url)

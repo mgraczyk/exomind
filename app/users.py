@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.postgres.fields.citext import CIEmailField
 
+from utils.fields import B64IDField
+
 
 class UserManager(BaseUserManager):
 
@@ -18,7 +20,7 @@ class User(AbstractBaseUser):
   EMAIL_FIELD = 'email'
   USERNAME_FIELD = 'username'
 
-  id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+  id = B64IDField(primary_key=True, editable=False)
   email = CIEmailField(max_length=255, unique=True)
   username = CIEmailField(max_length=255, unique=True)
 

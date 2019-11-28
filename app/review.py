@@ -1,13 +1,128 @@
-from django.db import models, transaction
+from django.db import models, transaction, connection
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+from common.util import AttributeDict, lazy_property
+from utils.b64id import B64ID
 from utils.fields import B64IDField
+from app.reactions import Reaction
 from app.reviewable import Reviewable
+from app.users import User
 
+
+def annotate_obj(obj, **kwargs):
+  for k, v in kwargs.items():
+    setattr(obj, k, v)
+  return obj
+
+
+def replace_uuid_recursively(obj):
+  if isinstance(obj, (list, tuple)):
+    for v in obj:
+      replace_uuid_recursively(v)
+  elif isinstance(obj, dict):
+    updates = {}
+    for k, v in obj.items():
+      replace_uuid_recursively(v)
+      if 'id' in k:
+        updates[k] = B64ID(v)
+    obj.update(updates)
+
+  return obj
+
+
+def maybe_uuid(x):
+  return x.as_uuid() if x else x
+
+
+class ReviewManager(models.Manager):
+
+  def get_queryset(self):
+    # TODO: Add reactions.
+    return super().get_queryset().select_related('user', 'reviewable')
+
+  def with_me_data(self, me_id=None, user_id=None, id=None):
+    review_table = 'app_review'
+    user_table = 'app_user'
+    reviewable_table = 'app_reviewable'
+    reaction_table = 'app_reaction'
+
+    table_cols = {
+        review_table: ('id', 'name', 'time', 'rating', 'text'),
+        user_table: ('id', 'email', 'username'),
+        reviewable_table: ('id', 'url', 'image_url'),
+        'me_data': ('reaction_type', ),
+        'reaction_data': ('explicit', )
+    }
+    table_cols_flat = [
+        (table, col) for table, cols in table_cols.items() for col in cols
+    ]
+    select_cols = ','.join(f'{table}.{col}' for table, col in table_cols_flat)
+    maybe_where_user = f'AND {review_table}.user_id=%(user_id)s' if user_id else ''
+    maybe_where_review = f'AND {review_table}.id=%(id)s' if id else ''
+    maybe_where_review_reactions = f'WHERE entity_id=%(id)s' if id else ''
+
+    query = f"""
+        SELECT {select_cols} FROM {review_table}
+        LEFT JOIN {user_table} on {user_table}.id={review_table}.user_id
+        LEFT JOIN {reviewable_table} on {reviewable_table}.id={review_table}.reviewable_id
+        LEFT OUTER JOIN (
+          SELECT entity_id, type as reaction_type
+          FROM {reaction_table}
+          WHERE user_id=%(me_id)s
+        ) me_data on me_data.entity_id={review_table}.id
+        LEFT OUTER JOIN (
+          SELECT
+            entity_id,
+            json_agg(json_build_object(
+              'user_id', {user_table}.id,
+              'username', {user_table}.username,
+              'type', {reaction_table}.type
+            )) as explicit
+          FROM {reaction_table}
+          JOIN {user_table} on {reaction_table}.user_id={user_table}.id
+          {maybe_where_review_reactions}
+          GROUP BY entity_id
+        ) reaction_data on reaction_data.entity_id={review_table}.id
+        WHERE true
+          {maybe_where_user}
+          {maybe_where_review}
+        ORDER BY {review_table}.time DESC
+    """
+
+    with connection.cursor() as cursor:
+      cursor.execute(
+          query, {
+              'me_id': maybe_uuid(me_id),
+              'user_id': maybe_uuid(user_id),
+              'id': maybe_uuid(id)
+          })
+      rows = list(cursor.fetchall())
+
+    table_col_to_row = {p: i for i, p in enumerate(table_cols_flat)}
+    row_data = replace_uuid_recursively([{
+        table: {col: row[table_col_to_row[table, col]]
+                for col in cols}
+        for table, cols in table_cols.items()
+    }
+                                         for row in rows])
+
+    results = [
+        annotate_obj(
+            Review(
+                **data[review_table],
+                user=User(**data[user_table]),
+                reviewable=Reviewable(**data[reviewable_table])),
+            me=data['me_data'],
+            reaction_data=data['reaction_data']) for data in row_data
+    ]
+
+    return results
 
 
 class Review(models.Model):
+  objects = ReviewManager()
+
   id = B64IDField(primary_key=True, editable=False)
 
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -20,6 +135,7 @@ class Review(models.Model):
   rating = models.FloatField(
       null=True, blank=True, validators=(MinValueValidator(0.), MaxValueValidator(5.)))
   text = models.TextField(max_length=65535, default='', blank=True)
+
 
   class Meta:
     unique_together = (('user', 'reviewable'),)
@@ -56,3 +172,13 @@ class Review(models.Model):
   @property
   def image_url(self):
     return self.reviewable.image_url
+
+  @lazy_property
+  def reaction_data(self):
+    raise NotImplementedError()
+
+  @lazy_property
+  def me_data(self):
+    return AttributeDict(
+        reaction_type=Reaction.objects.filter(
+            user_id=self.user_id, entity_id=self.id).first())
