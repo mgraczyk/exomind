@@ -28,6 +28,7 @@ artifacts:
     - 'template.yml'
     - 'exomind/**/*'
     - 'app/**/*'
+    - 'common/**/*'
     - 'utils/**/*'
     - 'test/**/*'
     - 'static/**/*'

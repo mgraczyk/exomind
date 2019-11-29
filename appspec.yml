@@ -7,6 +7,8 @@ files:
    destination: /home/ec2-user/app
  - source: /utils/
    destination: /home/ec2-user/utils
+ - source: /common/
+   destination: /home/ec2-user/common
  - source: /static/
    destination: /home/ec2-user/static
  - source: /test/
