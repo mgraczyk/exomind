@@ -43,7 +43,9 @@ def manage_review_view(request, review_id=None):
       fill_missing_review_data(review_id)
       next_url = request.path
     else:
-      review, _ = Review.create_or_update(request.user, data, id=review_id)
+      review, created = Review.create_or_update(request.user, data, id=review_id)
+      if created:
+        fill_missing_review_data(review_id)
       next_url = '/?submittedReview={}'.format(review.id)
 
     return HttpResponseRedirect(next_url)
