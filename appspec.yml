@@ -36,7 +36,7 @@ permissions:
 hooks:
   AfterInstall:
     - location: scripts/install_dependencies
-      timeout: 300
+      timeout: 1200
       runas: root
     - location: scripts/codestar_remote_access
       timeout: 300
