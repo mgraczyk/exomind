@@ -39,13 +39,13 @@ def manage_review_view(request, review_id=None):
     if data.get('action') == 'delete':
       Review.objects.filter(user=request.user, id=review_id).delete()
       next_url = '/'
-    if data.get('action') == 'autofill':
+    elif data.get('action') == 'autofill':
       fill_missing_review_data(review_id)
       next_url = request.path
     else:
       review, created = Review.create_or_update(request.user, data, id=review_id)
       if created:
-        fill_missing_review_data(review_id)
+        fill_missing_review_data(review.id)
       next_url = '/?submittedReview={}'.format(review.id)
 
     return HttpResponseRedirect(next_url)
