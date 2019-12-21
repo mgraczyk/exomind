@@ -83,8 +83,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'exomind.wsgi.application'
-
+ASGI_APPLICATION = 'exomind.asgi.application'
 
 DATABASES = {'default': dj_database_url.config()}
 
