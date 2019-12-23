@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e
+
+function randstr {
+  cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c $1
+}
+
+function get_db_instance_result {
+  aws rds describe-db-instances \
+  --region us-east-1 \
+  --db-instance-identifier "$1"
+}
+
+function parse_db_url() {
+  username=$(echo $1 | sed -En 's/^postgres:\/\/([^:]*):([^@]*)@([^:]*):([^\/]*)\/([^?]*).*$/\1/p')
+  pw=$(echo       $1 | sed -En 's/^postgres:\/\/([^:]*):([^@]*)@([^:]*):([^\/]*)\/([^?]*).*$/\2/p')
+  address=$(echo  $1 | sed -En 's/^postgres:\/\/([^:]*):([^@]*)@([^:]*):([^\/]*)\/([^?]*).*$/\3/p')
+  port=$(echo     $1 | sed -En 's/^postgres:\/\/([^:]*):([^@]*)@([^:]*):([^\/]*)\/([^?]*).*$/\4/p')
+  db=$(echo       $1 | sed -En 's/^postgres:\/\/([^:]*):([^@]*)@([^:]*):([^\/]*)\/([^?]*).*$/\5/p')
+}
+
+function fetch_rds_db() {
+  db_instance_result=$(get_db_instance_result $1)
+  username=$(echo $db_instance_result | jq -r .DBInstances[0].MasterUsername)
+  address=$(echo $db_instance_result | jq -r .DBInstances[0].Endpoint.Address)
+  port=$(echo $db_instance_result | jq -r .DBInstances[0].Endpoint.Port)
+}

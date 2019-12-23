@@ -1,0 +1,10 @@
+#!/bin/bash
+if [ -z "$DATABASE_URL" ]; then
+  echo "Must set DATABASE_URL"
+  exit 1
+fi
+
+. $(dirname $0)/lib
+
+parse_db_url $DATABASE_URL
+PGPASSWORD=$pw psql -w -p "$port" -U "$username" -h "$address" -d "$db" "$@"
