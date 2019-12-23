@@ -11,6 +11,7 @@ from utils import AttributeDict
 
 CREATE_OR_UPDATE_METHODS = {'POST', 'PUT', 'PATCH'}
 
+
 def render_with_globals(request, template, context):
   context['me'] = request.user
   return render(request, template, context)
@@ -54,11 +55,10 @@ def manage_review_view(request, review_id=None):
       review = Review.objects.get(user=request.user, id=review_id)
     else:
       # pre-populate fields from url parameters.
-      review = AttributeDict({
-          k: v
-          for k, v in request.GET.items()
-          if k in {'url', 'rating', 'text'}
-      })
+      review = AttributeDict(
+          {k: v
+           for k, v in request.GET.items()
+           if k in {'url', 'rating', 'text'}})
 
   return render_with_globals(request, 'manage_review.html', {
       'review': review,
@@ -88,6 +88,24 @@ def feed_view(request):
 
   return render_with_globals(request, 'feed.html', context)
 
+
+def review_search_view(request):
+  q = request.GET.get('q')
+  if q:
+    q_search = q.lower()
+    reviews = Review.objects.with_me_data(me_id=request.user.id)
+    filtered_reviews = [r for r in reviews if q_search in ' '.join((r.name, r.url, r.text)).lower()]
+  else:
+    filtered_reviews = []
+
+  context = {
+      'reviews': filtered_reviews,
+      'q': q,
+  }
+
+  return render_with_globals(request, 'review_search.html', context)
+
+
 def react_to_review_view(request, review_id):
   if request.user.id is None:
     return HttpResponseRedirect('/login')
@@ -98,7 +116,9 @@ def react_to_review_view(request, review_id):
       my_reactions_query.delete()
     else:
       my_reactions_query.update_or_create(
-          user_id=request.user.id, entity_id=review_id, defaults={"type": 1})
+          user_id=request.user.id, entity_id=review_id, defaults={
+              "type": 1
+          })
 
   if request.GET.get('full'):
     next_url = f'/reviews/{review_id}'

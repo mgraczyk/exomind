@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="collection with-header">
+
+<form class="EXM-search-query" method="GET">
+  <input
+    value="{%firstof q ''%}"
+    type="search" name="q"
+    id="search_query"
+    placeholder="Search Exomind"
+    autofocus >
+</form>
+
+{% for review in reviews %}
+  {% include "review_item.html" with me=me review=review %}
+{% empty %}
+  <div class="collection-item"><h5>
+      {% if q %}
+      No Results
+      {% else %}
+      Type query above for results
+      {% endif %}
+  </h5></div>
+{% endfor %}
+</div>
+
+{% endblock %}

@@ -41,7 +41,7 @@ class ReviewManager(models.Manager):
     # TODO: Add reactions.
     return super().get_queryset().select_related('user', 'reviewable')
 
-  def with_me_data(self, me_id=None, user_id=None, id=None):
+  def with_me_data(self, me_id=None, user_id=None, id=None, limit=None, offset=None):
     review_table = 'app_review'
     user_table = 'app_user'
     reviewable_table = 'app_reviewable'
@@ -51,16 +51,17 @@ class ReviewManager(models.Manager):
         review_table: ('id', 'name', 'time', 'rating', 'text'),
         user_table: ('id', 'email', 'username'),
         reviewable_table: ('id', 'url', 'image_url'),
-        'me_data': ('reaction_type', ),
-        'reaction_data': ('explicit', )
+        'me_data': ('reaction_type',),
+        'reaction_data': ('explicit',)
     }
-    table_cols_flat = [
-        (table, col) for table, cols in table_cols.items() for col in cols
-    ]
+    table_cols_flat = [(table, col) for table, cols in table_cols.items() for col in cols]
     select_cols = ','.join(f'{table}.{col}' for table, col in table_cols_flat)
     maybe_where_user = f'AND {review_table}.user_id=%(user_id)s' if user_id else ''
     maybe_where_review = f'AND {review_table}.id=%(id)s' if id else ''
     maybe_where_review_reactions = f'WHERE entity_id=%(id)s' if id else ''
+
+    maybe_limit = f'LIMIT {limit}' if limit else ''
+    maybe_offset = f'OFFSET {offset}' if offset else ''
 
     query = f"""
         SELECT {select_cols} FROM {review_table}
@@ -88,15 +89,16 @@ class ReviewManager(models.Manager):
           {maybe_where_user}
           {maybe_where_review}
         ORDER BY {review_table}.time DESC
+        {maybe_limit}
+        {maybe_offset}
     """
 
     with connection.cursor() as cursor:
-      cursor.execute(
-          query, {
-              'me_id': maybe_uuid(me_id),
-              'user_id': maybe_uuid(user_id),
-              'id': maybe_uuid(id)
-          })
+      cursor.execute(query, {
+          'me_id': maybe_uuid(me_id),
+          'user_id': maybe_uuid(user_id),
+          'id': maybe_uuid(id)
+      })
       rows = list(cursor.fetchall())
 
     table_col_to_row = {p: i for i, p in enumerate(table_cols_flat)}
@@ -135,7 +137,6 @@ class Review(models.Model):
   rating = models.FloatField(
       null=True, blank=True, validators=(MinValueValidator(0.), MaxValueValidator(5.)))
   text = models.TextField(max_length=65535, default='', blank=True)
-
 
   class Meta:
     unique_together = (('user', 'reviewable'),)
@@ -180,5 +181,4 @@ class Review(models.Model):
   @lazy_property
   def me_data(self):
     return AttributeDict(
-        reaction_type=Reaction.objects.filter(
-            user_id=self.user_id, entity_id=self.id).first())
+        reaction_type=Reaction.objects.filter(user_id=self.user_id, entity_id=self.id).first())
