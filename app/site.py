@@ -12,6 +12,20 @@ from utils import AttributeDict
 CREATE_OR_UPDATE_METHODS = {'POST', 'PUT', 'PATCH'}
 
 
+def int_or_none(x):
+  try:
+    return int(x)
+  except (ValueError, TypeError):
+    return None
+
+
+def parse_pagination_params(request):
+  return {
+      'limit': int_or_none(request.GET.get('limit')) or 80,
+      'offset': int_or_none(request.GET.get('offset')) or 0,
+  }
+
+
 def render_with_globals(request, template, context):
   context['me'] = request.user
   return render(request, template, context)
@@ -67,9 +81,12 @@ def manage_review_view(request, review_id=None):
 
 
 def profile_view(request, user_id, review_id=None):
+  pagination = parse_pagination_params(request)
+
   context = {
-      'reviews': Review.objects.with_me_data(user_id=user_id),
+      'reviews': Review.objects.with_me_data(user_id=user_id, **pagination),
       'profile_user': User.objects.get(id=user_id),
+      'pagination': pagination,
   }
   return render_with_globals(request, 'profile.html', context)
 
@@ -82,8 +99,11 @@ def full_review_view(request, review_id):
 
 
 def feed_view(request):
+  pagination = parse_pagination_params(request)
+
   context = {
-      'reviews': Review.objects.with_me_data(me_id=request.user.id),
+      'reviews': Review.objects.with_me_data(me_id=request.user.id, **pagination),
+      'pagination': pagination,
   }
 
   return render_with_globals(request, 'feed.html', context)

@@ -35,3 +35,8 @@ def star_string(value):
   return '{}{}{}'.format('star ' * (double_value // 2),
                          'star_half ' if double_value % 2 else '',
                          'star_border ' * (5 - (double_value + 1) // 2))
+
+
+@register.filter(is_safe=True)
+def sub(value, arg):
+  return value - arg
