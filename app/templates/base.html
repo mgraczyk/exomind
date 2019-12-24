@@ -70,7 +70,7 @@
     </div>
   </body>
   <script>
-    window.onload = function() {
+    (function() {
       function isInputField(element) {
         var tagName = element.tagName.toLowerCase();
         return tagName === 'textarea' || tagName === 'input';
@@ -99,6 +99,6 @@
         startNewReview((evt.dataTransfer || window.dataTransfer).getData('Text'));
         evt.preventDefault();
       }
-    }
+    })();
   </script>
 </html>
