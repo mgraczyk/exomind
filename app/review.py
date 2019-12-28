@@ -130,9 +130,7 @@ class Review(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   reviewable = models.ForeignKey('app.reviewable', on_delete=models.PROTECT)
 
-  # TODO: Make this non-nullable
-  name = models.TextField(max_length=200, null=True, blank=True)
-
+  name = models.TextField(max_length=200, default='', blank=True)
   time = models.DateTimeField(auto_now_add=True, editable=False)
   rating = models.FloatField(
       null=True, blank=True, validators=(MinValueValidator(0.), MaxValueValidator(5.)))

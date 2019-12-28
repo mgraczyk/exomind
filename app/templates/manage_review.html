@@ -19,7 +19,7 @@
       <img src="{{review.image_url}}"></img>
     </div>
     <div class="EXM-review-form__container" style="flex: 1; padding-left: 0.5em;">
-      <input value="{%firstof review.image_url ''%}"
+      <input value="{{review.image_url}}"
              type="url" name="image_url" id="id_image_url">
       <label for="id_image_url">Image URL for the thing you&#39;re reviewing:</label>
     </div>
