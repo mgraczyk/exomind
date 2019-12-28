@@ -144,7 +144,12 @@ class Review(models.Model):
   @classmethod
   def create_or_update(cls, user, data, id):
     with transaction.atomic():
-      reviewable, _ = Reviewable.get_or_create(data)
+      if user.is_admin:
+        # TODO: Do not special case admins here.
+        reviewable, _ = Reviewable.update_or_create(data)
+      else:
+        reviewable, _ = Reviewable.get_or_create(data)
+
       kwargs = {
           'user': user,
           'defaults': {
