@@ -20,7 +20,7 @@
   <div class="collection-item"><h5>No reviews yet!</h5></div>
 {% endfor %}
 
-<div style="display: flex; justify-content: space-between">
+<div class="EXM-next-back-footer">
 {% if pagination.offset > 0 %}
   <a href="?offset={{pagination.offset|sub:pagination.limit}}&limit={{pagination.limit}}">
     &#12296; Back

@@ -175,6 +175,12 @@ input.EXM-ratings-slider:disabled ~ .EXM-ratings-ticks {
   display: inline-block;
 }
 
+.EXM-next-back-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5em;
+}
+
 .hvr-gray:hover {
   background: #D3D3D3;
 }

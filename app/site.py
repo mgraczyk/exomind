@@ -10,6 +10,7 @@ from app.review import Review
 from utils import AttributeDict
 
 CREATE_OR_UPDATE_METHODS = {'POST', 'PUT', 'PATCH'}
+DEFAULT_LIMIT = 80
 
 
 def int_or_none(x):
@@ -21,7 +22,7 @@ def int_or_none(x):
 
 def parse_pagination_params(request):
   return {
-      'limit': int_or_none(request.GET.get('limit')) or 80,
+      'limit': int_or_none(request.GET.get('limit')) or DEFAULT_LIMIT,
       'offset': int_or_none(request.GET.get('offset')) or 0,
   }
 
@@ -119,7 +120,7 @@ def review_search_view(request):
     filtered_reviews = []
 
   context = {
-      'reviews': filtered_reviews,
+      'reviews': filtered_reviews[:DEFAULT_LIMIT],
       'q': q,
   }
 
