@@ -3,9 +3,36 @@
 
 {% load tags %}
 
+<h3>@{{profile_user.username}}</h3>
+
+{% if stats.host_breakdown|length %}
+<h4>Top Sites</h4>
+
+<table class="striped responsive-table">
+  <thead>
+    <tr>
+      <th>Site</th>
+      <th>Reviews</th>
+      <th>Average Rating</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for host_stats in stats.host_breakdown|slice:":5" %}
+      <tr>
+        <td><a href="https://{{host_stats.host}}">{{host_stats.host}}</a></td>
+        <td>{{host_stats.num_reviews}}</td>
+        <td>{{host_stats.avg_rating}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<br>
+{% endif %}
+
 <div class="collection with-header">
 <div class="collection-header EXM-title-right-button">
-  <h3>@{{profile_user.username}}'s Reviews</h3>
+  <h3>All Reviews</h3>
   {% if me.id == profile_user.id %}
     <a
       href="{% url 'new_review' %}"

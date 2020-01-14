@@ -5,6 +5,7 @@ from django.shortcuts import render
 
 from app.fill_missing import fill_missing_review_data
 from app.users import User
+from app.profile import compute_stats_for_profile
 from app.reactions import Reaction
 from app.review import Review
 from utils import AttributeDict
@@ -84,9 +85,12 @@ def manage_review_view(request, review_id=None):
 def profile_view(request, user_id, review_id=None):
   pagination = parse_pagination_params(request)
 
+  stats = compute_stats_for_profile(user_id)
+
   context = {
       'reviews': Review.objects.with_me_data(user_id=user_id, **pagination),
       'profile_user': User.objects.get(id=user_id),
+      'stats': stats,
       'pagination': pagination,
   }
   return render_with_globals(request, 'profile.html', context)
