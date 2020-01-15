@@ -8,12 +8,13 @@
 {% if stats.host_breakdown|length %}
 <h4>Top Sites</h4>
 
-<table class="striped responsive-table">
+<div style="width: 100%; overflow-x: scroll">
+<table class="striped" >
   <thead>
     <tr>
       <th>Site</th>
       <th>Reviews</th>
-      <th>Average Rating</th>
+      <th>Avg Rating</th>
     </tr>
   </thead>
 
@@ -22,11 +23,13 @@
       <tr>
         <td><a href="https://{{host_stats.host}}">{{host_stats.host}}</a></td>
         <td>{{host_stats.num_reviews}}</td>
-        <td>{{host_stats.avg_rating}}</td>
+        <td>{{host_stats.avg_rating|floatformat:2}}</td>
       </tr>
     {% endfor %}
   </tbody>
 </table>
+</div>
+
 <br>
 {% endif %}
 
