@@ -3,7 +3,16 @@
 
 {% load tags %}
 
-<h3>@{{profile_user.username}}</h3>
+<div class="EXM-title-right-button">
+  <h3>@{{profile_user.username}}</h3>
+  {% if me.id == profile_user.id %}
+    <a
+      href="{% url 'new_review' %}"
+      class="btn-floating btn-large waves-effect waves-light red">
+      <i class="large material-icons">add</i>
+    </a>
+  {% endif %}
+</div>
 
 {% if stats.host_breakdown|length %}
 <h4>Top Sites</h4>
@@ -33,16 +42,22 @@
 <br>
 {% endif %}
 
+
+{% if stats.top_reviews|length %}
+<div class="collection with-header">
+<div class="collection-header">
+  <h3>Top Reviews</h3>
+</div>
+{% for review in stats.top_reviews %}
+  {% include "review_item.html" with me=me review=review %}
+{% endfor %}
+</div>
+{% endif %}
+
+
 <div class="collection with-header">
 <div class="collection-header EXM-title-right-button">
   <h3>All Reviews</h3>
-  {% if me.id == profile_user.id %}
-    <a
-      href="{% url 'new_review' %}"
-      class="btn-floating btn-large waves-effect waves-light red">
-      <i class="large material-icons">add</i>
-    </a>
-  {% endif %}
 </div>
 {% for review in reviews %}
   {% include "review_item.html" with me=me review=review %}

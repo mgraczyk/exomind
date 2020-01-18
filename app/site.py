@@ -85,7 +85,7 @@ def manage_review_view(request, review_id=None):
 def profile_view(request, user_id, review_id=None):
   pagination = parse_pagination_params(request)
 
-  stats = compute_stats_for_profile(user_id)
+  stats = compute_stats_for_profile(request.user.id, user_id)
 
   context = {
       'reviews': Review.objects.with_me_data(user_id=user_id, **pagination),

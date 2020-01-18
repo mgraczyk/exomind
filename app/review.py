@@ -41,7 +41,7 @@ class ReviewManager(models.Manager):
     # TODO: Add reactions.
     return super().get_queryset().select_related('user', 'reviewable')
 
-  def with_me_data(self, me_id=None, user_id=None, id=None, limit=None, offset=None):
+  def with_me_data(self, me_id=None, user_id=None, id=None, limit=None, offset=None, order_by=None):
     review_table = 'app_review'
     user_table = 'app_user'
     reviewable_table = 'app_reviewable'
@@ -60,6 +60,7 @@ class ReviewManager(models.Manager):
     maybe_where_review = f'AND {review_table}.id=%(id)s' if id else ''
     maybe_where_review_reactions = f'WHERE entity_id=%(id)s' if id else ''
 
+    maybe_order_by = f'ORDER BY {order_by}' if order_by else f'ORDER BY {review_table}.time DESC'
     maybe_limit = f'LIMIT {limit}' if limit else ''
     maybe_offset = f'OFFSET {offset}' if offset else ''
 
@@ -88,7 +89,7 @@ class ReviewManager(models.Manager):
         WHERE true
           {maybe_where_user}
           {maybe_where_review}
-        ORDER BY {review_table}.time DESC
+        {maybe_order_by}
         {maybe_limit}
         {maybe_offset}
     """
