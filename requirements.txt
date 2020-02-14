@@ -1,5 +1,5 @@
 # dependencies common to all environments
-Django==3.0.2
+Django==3.0.3
 beautifulsoup4==4.8.2
 dj-database-url==0.5.0
 psycopg2-binary==2.8.4
@@ -7,6 +7,6 @@ pytz==2019.3
 raven==6.10.0
 requests==2.22.0
 social-auth-app-django==3.1.0
-tqdm==4.41.1
-uvicorn==0.11.1
+tqdm==4.42.1
+uvicorn==0.11.2
 whitenoise==5.0.1
