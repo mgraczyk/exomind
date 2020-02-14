@@ -45,4 +45,18 @@ def sub(value, arg):
 
 @register.filter(is_safe=True)
 def parse_isotime(value):
-  return datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f%z")
+  try:
+    return datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f%z")
+  except ValueError:
+    pass
+
+  colon_idx = value.rfind('+')
+  if colon_idx >= 0:
+    value = value[:colon_idx]
+
+  try:
+    return datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+  except ValueError:
+    pass
+
+  return ""
