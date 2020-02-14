@@ -35,17 +35,57 @@
   <br>
   {% endif %}
 
-  <form class="EXM-like-form" method="POST"
-        action="{% url 'react_to_review' review_id=review.id %}?full=1">
-    {% csrf_token %}
-    <button type="submit" class="btn-flat waves-effect waves-light hvr-gray">Like</button>
-  </form>
+  <div>
+    <form class="EXM-like-form" method="POST"
+          action="{% url 'react_to_review' review_id=review.id %}?full=1">
+      {% csrf_token %}
+      <button type="submit" class="btn-flat waves-effect waves-light hvr-gray">Like</button>
+    </form>
 
-  {% if review.user.id == me.id %}
-    <span>
-      <a href="{% url 'manage_review' review_id=review.id %}" class="btn-flat hvr-gray">Edit</a>
-    </span>
-  {% endif %}
+    {% if review.user.id == me.id %}
+      <span>
+        <a href="{% url 'manage_review' review_id=review.id %}" class="btn-flat hvr-gray">Edit</a>
+      </span>
+    {% endif %}
+  </div>
+
+  <div>
+  {% for comment in review.comments.explicit %}
+    <div class="EXM-comment-container">
+      <div class="EXM-comment-text">
+        <div>
+          <a href="/profiles/{{comment.user_id}}">{{comment.username}}</a>
+          &nbsp;{{comment.text}}
+        </div>
+
+        {% if comment.user_id == me.id %}
+        <form method="POST"
+              action="{% url 'delete_comment' review_id=review.id comment_id=comment.id %}"
+              class="EXM-comment-delete-button">
+          {% csrf_token %}
+          <button type="submit" class="btn-flat waves-effect waves-light hvr-gray">
+            ❎
+          </button>
+        </form>
+        {% endif %}
+      </div>
+      <div class="EXM-comment-footer">
+        {{review.time|naturaltime }}
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+
+  <div>
+    <form method="POST"
+          autocomplete="off"
+          action="{% url 'comment_on_review' review_id=review.id %}">
+      {% csrf_token %}
+      <input class="EXM-comment-input" type="text"
+             placeholder="Write a comment..." name="text">
+      </input>
+    </form>
+  </div>
 </div>
 
 {% endblock %}

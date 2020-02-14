@@ -191,3 +191,30 @@ input.EXM-ratings-slider:disabled ~ .EXM-ratings-ticks {
 .hvr-gray:hover {
   background: #D3D3D3;
 }
+
+.EXM-comment-input {
+  background: lightgrey;
+  border-radius: 0.5em;
+}
+
+.EXM-comment-container {
+}
+
+.EXM-comment-text {
+  background: #EFEFEF;
+  border-radius: 0.5em;
+  padding: 5px 5px 2px 2px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.EXM-comment-text > *:first-child {
+  flex-grow: 1;
+}
+
+.EXM-comment-footer {
+  margin-left: 1em;
+  font-size: 0.8em;
+}

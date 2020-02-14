@@ -24,8 +24,8 @@ def replace_uuid_recursively(obj):
     updates = {}
     for k, v in obj.items():
       replace_uuid_recursively(v)
-      if 'id' in k:
-        updates[k] = B64ID(v)
+      if k.endswith('id'):
+        updates[k] = None if v is None else B64ID(v)
     obj.update(updates)
 
   return obj
@@ -46,19 +46,21 @@ class ReviewManager(models.Manager):
     user_table = 'app_user'
     reviewable_table = 'app_reviewable'
     reaction_table = 'app_reaction'
+    comment_table = 'app_comment'
 
     table_cols = {
         review_table: ('id', 'name', 'time', 'rating', 'text'),
         user_table: ('id', 'email', 'username'),
         reviewable_table: ('id', 'url', 'image_url'),
         'me_data': ('reaction_type',),
-        'reaction_data': ('explicit',)
+        'reaction_data': ('explicit',),
+        'comments': ('explicit',),
     }
     table_cols_flat = [(table, col) for table, cols in table_cols.items() for col in cols]
     select_cols = ','.join(f'{table}.{col}' for table, col in table_cols_flat)
     maybe_where_user = f'AND {review_table}.user_id=%(user_id)s' if user_id else ''
     maybe_where_review = f'AND {review_table}.id=%(id)s' if id else ''
-    maybe_where_review_reactions = f'WHERE entity_id=%(id)s' if id else ''
+    maybe_where_entity_has_id = f'WHERE entity_id=%(id)s' if id else ''
 
     maybe_order_by = f'ORDER BY {order_by}' if order_by else f'ORDER BY {review_table}.time DESC'
     maybe_limit = f'LIMIT {limit}' if limit else ''
@@ -83,9 +85,25 @@ class ReviewManager(models.Manager):
             )) as explicit
           FROM {reaction_table}
           JOIN {user_table} on {reaction_table}.user_id={user_table}.id
-          {maybe_where_review_reactions}
+          {maybe_where_entity_has_id}
           GROUP BY entity_id
         ) reaction_data on reaction_data.entity_id={review_table}.id
+        LEFT OUTER JOIN (
+          SELECT
+            entity_id,
+            json_agg(json_build_object(
+              'id', {comment_table}.id,
+              'user_id', {user_table}.id,
+              'username', {user_table}.username,
+              'text', {comment_table}.text,
+              'created_at', {comment_table}.created_at,
+              'in_reply_to_id', {comment_table}.in_reply_to_id
+            )) as explicit
+          FROM {comment_table}
+          JOIN {user_table} on {comment_table}.user_id={user_table}.id
+          {maybe_where_entity_has_id}
+          GROUP BY entity_id
+        ) comments on comments.entity_id={review_table}.id
         WHERE true
           {maybe_where_user}
           {maybe_where_review}
@@ -103,12 +121,11 @@ class ReviewManager(models.Manager):
       rows = list(cursor.fetchall())
 
     table_col_to_row = {p: i for i, p in enumerate(table_cols_flat)}
-    row_data = replace_uuid_recursively([{
-        table: {col: row[table_col_to_row[table, col]]
-                for col in cols}
+    row_data = [{
+        table: replace_uuid_recursively({col: row[table_col_to_row[table, col]]
+                                         for col in cols})
         for table, cols in table_cols.items()
-    }
-                                         for row in rows])
+    } for row in rows]
 
     results = [
         annotate_obj(
@@ -117,7 +134,8 @@ class ReviewManager(models.Manager):
                 user=User(**data[user_table]),
                 reviewable=Reviewable(**data[reviewable_table])),
             me=data['me_data'],
-            reaction_data=data['reaction_data']) for data in row_data
+            reaction_data=data['reaction_data'],
+            comments=data['comments']) for data in row_data
     ]
 
     return results

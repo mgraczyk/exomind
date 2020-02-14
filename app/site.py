@@ -1,5 +1,5 @@
 from django.db import transaction
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.contrib.auth import logout
 from django.shortcuts import render
 
@@ -7,6 +7,7 @@ from app.fill_missing import fill_missing_review_data
 from app.users import User
 from app.profile import compute_stats_for_profile
 from app.reactions import Reaction
+from app.comment import Comment
 from app.review import Review
 from utils import AttributeDict
 
@@ -141,13 +142,44 @@ def react_to_review_view(request, review_id):
       my_reactions_query.delete()
     else:
       my_reactions_query.update_or_create(
-          user_id=request.user.id, entity_id=review_id, defaults={
-              "type": 1
-          })
+          user_id=request.user.id, entity_id=review_id, defaults={"type": 1})
 
   if request.GET.get('full'):
     next_url = f'/reviews/{review_id}'
   else:
     next_url = f'/?likedReview={review_id}'
 
+  return HttpResponseRedirect(next_url)
+
+
+def comment_on_review_view(request, review_id):
+  if request.user.id is None:
+    return HttpResponseRedirect('/login')
+
+  if request.method != 'POST':
+    raise HttpResponseForbidden()
+
+  data = request.POST
+  if not data.get('text'):
+    # Just send them back to the review page.
+    return full_review_view(request, review_id)
+
+  created_comment = Comment.objects.create(
+      user_id=request.user.id, entity_id=review_id, text=data.get('text'), in_reply_to=None)
+
+  next_url = f'/reviews/{review_id}?created_comment_id={created_comment.id}'
+  return HttpResponseRedirect(next_url)
+
+
+def delete_comment_view(request, review_id, comment_id):
+  if request.user.id is None:
+    return HttpResponseRedirect('/login')
+
+  if request.method != 'POST':
+    raise HttpResponseForbidden()
+
+  deleted = Comment.objects.filter(
+      user_id=request.user.id, entity_id=review_id, id=comment_id).delete()
+
+  next_url = f'/reviews/{review_id}'
   return HttpResponseRedirect(next_url)
