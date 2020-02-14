@@ -1,3 +1,4 @@
+import datetime
 from django import template
 from django.utils.safestring import mark_safe
 from django.utils.html import urlize as urlize_impl
@@ -40,3 +41,8 @@ def star_string(value):
 @register.filter(is_safe=True)
 def sub(value, arg):
   return value - arg
+
+
+@register.filter(is_safe=True)
+def parse_isotime(value):
+  return datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f%z")

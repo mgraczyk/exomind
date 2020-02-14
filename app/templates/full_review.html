@@ -70,7 +70,7 @@
         {% endif %}
       </div>
       <div class="EXM-comment-footer">
-        {{review.time|naturaltime }}
+        {{comment.created_at|parse_isotime|naturaltime }}
       </div>
     </div>
   {% endfor %}
