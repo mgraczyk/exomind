@@ -203,7 +203,7 @@ input.EXM-ratings-slider:disabled ~ .EXM-ratings-ticks {
 .EXM-comment-text {
   background: #EFEFEF;
   border-radius: 0.5em;
-  padding: 5px 5px 2px 2px;
+  padding: 2px 5px 2px 5px;
   margin-bottom: 5px;
   display: flex;
   align-items: center;
