@@ -9,3 +9,6 @@ class Reaction(models.Model):
   entity_id = B64IDField()
 
   type = models.PositiveSmallIntegerField(default=0)
+
+  class Meta:
+    indexes = (models.Index(fields=('entity_id',)),)

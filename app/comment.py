@@ -12,3 +12,9 @@ class Comment(models.Model):
   text = models.TextField(default='')
   created_at = models.DateTimeField(auto_now_add=True)
   in_reply_to = models.ForeignKey('app.Comment', null=True, blank=True, on_delete=models.PROTECT)
+
+  class Meta:
+    indexes = (
+        models.Index(fields=('entity_id',)),
+        models.Index(fields=('in_reply_to',)),
+    )
