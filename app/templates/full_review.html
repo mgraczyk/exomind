@@ -36,7 +36,8 @@
   {% endif %}
 
   <div>
-    <form class="EXM-like-form" method="POST"
+    <form class="EXM-like-form {% if review.me.reaction_type %}liked{% endif %}"
+          method="POST"
           action="{% url 'react_to_review' review_id=review.id %}?full=1">
       {% csrf_token %}
       <button type="submit" class="btn-flat waves-effect waves-light hvr-gray">Like</button>
@@ -50,6 +51,7 @@
   </div>
 
   <div>
+  <hr>
   {% for comment in review.comments.explicit %}
     <div class="EXM-comment-container">
       <div class="EXM-comment-text">
@@ -70,8 +72,13 @@
         {% endif %}
       </div>
       <div class="EXM-comment-footer">
-        {{comment.created_at|parse_isotime|naturaltime }}
+        <span>
+          {{comment.created_at|parse_isotime|naturaltime }}
+        </span>
       </div>
+    </div>
+  {% empty %}
+    <div class="EXM-comment-container">
     </div>
   {% endfor %}
   </div>

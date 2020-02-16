@@ -182,6 +182,10 @@ input.EXM-ratings-slider:disabled ~ .EXM-ratings-ticks {
   display: inline-block;
 }
 
+.liked button {
+  background: #EAEAEA;
+}
+
 .EXM-next-back-footer {
   display: flex;
   justify-content: space-between;
@@ -217,4 +221,11 @@ input.EXM-ratings-slider:disabled ~ .EXM-ratings-ticks {
 .EXM-comment-footer {
   margin-left: 1em;
   font-size: 0.8em;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.EXM-comment-footer > * {
+  margin-right: 0.5em;
 }

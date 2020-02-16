@@ -17,6 +17,7 @@ urlpatterns = [
     path('reviews/<b64id:review_id>/react', sv.react_to_review_view, name='react_to_review'),
     path('reviews/<b64id:review_id>/comment', sv.comment_on_review_view, name='comment_on_review'),
     path('reviews/<b64id:review_id>/comment/<b64id:comment_id>/delete', sv.delete_comment_view, name='delete_comment'),
+    path('reviews/<b64id:review_id>/comment/<b64id:comment_id>/react', sv.react_to_comment_view, name='react_to_comment'),
     path('reviews/search', sv.review_search_view, name='review_search'),
     path('profiles/<b64id:user_id>', sv.profile_view, name='profile_view'),
     path('admin', av.admin_view, name='admin'),

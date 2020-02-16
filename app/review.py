@@ -60,7 +60,7 @@ class ReviewManager(models.Manager):
     select_cols = ','.join(f'{table}.{col}' for table, col in table_cols_flat)
     maybe_where_user = f'AND {review_table}.user_id=%(user_id)s' if user_id else ''
     maybe_where_review = f'AND {review_table}.id=%(id)s' if id else ''
-    maybe_where_entity_has_id = f'WHERE entity_id=%(id)s' if id else ''
+    maybe_where_entity_has_id = f'AND entity_id=%(id)s' if id else ''
 
     maybe_order_by = f'ORDER BY {order_by}' if order_by else f'ORDER BY {review_table}.time DESC'
     maybe_limit = f'LIMIT {limit}' if limit else ''
@@ -74,6 +74,7 @@ class ReviewManager(models.Manager):
           SELECT entity_id, type as reaction_type
           FROM {reaction_table}
           WHERE user_id=%(me_id)s
+          {maybe_where_entity_has_id}
         ) me_data on me_data.entity_id={review_table}.id
         LEFT OUTER JOIN (
           SELECT
@@ -85,6 +86,7 @@ class ReviewManager(models.Manager):
             )) as explicit
           FROM {reaction_table}
           JOIN {user_table} on {reaction_table}.user_id={user_table}.id
+          WHERE true
           {maybe_where_entity_has_id}
           GROUP BY entity_id
         ) reaction_data on reaction_data.entity_id={review_table}.id
@@ -101,6 +103,7 @@ class ReviewManager(models.Manager):
             )) as explicit
           FROM {comment_table}
           JOIN {user_table} on {comment_table}.user_id={user_table}.id
+          WHERE true
           {maybe_where_entity_has_id}
           GROUP BY entity_id
         ) comments on comments.entity_id={review_table}.id

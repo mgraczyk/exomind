@@ -89,7 +89,7 @@ def profile_view(request, user_id, review_id=None):
   stats = compute_stats_for_profile(request.user.id, user_id)
 
   context = {
-      'reviews': Review.objects.with_me_data(user_id=user_id, **pagination),
+      'reviews': Review.objects.with_me_data(me_id=request.user.id, user_id=user_id, **pagination),
       'profile_user': User.objects.get(id=user_id),
       'stats': stats,
       'pagination': pagination,
@@ -99,7 +99,7 @@ def profile_view(request, user_id, review_id=None):
 
 def full_review_view(request, review_id):
   context = {
-      'review': Review.objects.with_me_data(id=review_id)[0],
+      'review': Review.objects.with_me_data(me_id=request.user.id, id=review_id)[0],
   }
   return render_with_globals(request, 'full_review.html', context)
 
@@ -148,6 +148,23 @@ def react_to_review_view(request, review_id):
     next_url = f'/reviews/{review_id}'
   else:
     next_url = f'/?likedReview={review_id}'
+
+  return HttpResponseRedirect(next_url)
+
+
+def react_to_comment_view(request, review_id, comment_id):
+  if request.user.id is None:
+    return HttpResponseRedirect('/login')
+
+  with transaction.atomic():
+    my_reactions_query = Reaction.objects.filter(user_id=request.user.id, entity_id=comment_id)
+    if my_reactions_query.exists():
+      my_reactions_query.delete()
+    else:
+      my_reactions_query.update_or_create(
+          user_id=request.user.id, entity_id=review_id, defaults={"type": 1})
+
+  next_url = f'/reviews/{review_id}?likedComment={comment_id}'
 
   return HttpResponseRedirect(next_url)
 
