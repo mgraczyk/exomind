@@ -2,7 +2,8 @@
 yum update
 easy_install pip
 pip install supervisor==4.1.0
-yum -y install python36 python36-virtualenv python36-pip
+yum -y install python37 python37-virtualenv
+yum -y install python37-pip
 python3.7 -m pip install virtualenv
 cd /home/ec2-user
 virtualenv .venv3
