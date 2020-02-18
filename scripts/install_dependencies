@@ -1,9 +1,10 @@
 #!/bin/bash
 yum update
 easy_install pip
-pip install supervisor==3.3.4
+pip install supervisor==4.1.0
 yum -y install python36 python36-virtualenv python36-pip
+python3.7 -m pip install virtualenv
 cd /home/ec2-user
-virtualenv-3.6 .venv3
+virtualenv .venv3
 source .venv3/bin/activate
 pip install -r requirements.txt
