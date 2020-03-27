@@ -21,7 +21,8 @@ def compute_stats_for_profile(me_id, user_id):
     host_breakdown_items.append({
         'host': host,
         'num_reviews': len(reviews),
-        'avg_rating': sum(r.rating for r in reviews_with_rating) / len(reviews_with_rating),
+        'avg_rating': sum(r.rating for r in reviews_with_rating) / len(reviews_with_rating)
+            if reviews_with_rating else None,
     })
 
   return {
