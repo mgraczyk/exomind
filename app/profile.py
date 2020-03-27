@@ -17,7 +17,7 @@ def compute_stats_for_profile(me_id, user_id):
 
   host_breakdown_items = []
   for host, reviews in reviews_by_host.items():
-    reviews_with_rating = [r for r in reviews if r is not None]
+    reviews_with_rating = [r.rating for r in reviews if r is not None]
     host_breakdown_items.append({
         'host': host,
         'num_reviews': len(reviews),
