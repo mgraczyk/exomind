@@ -12,7 +12,7 @@ from app.review import Review
 from utils import AttributeDict
 
 CREATE_OR_UPDATE_METHODS = {'POST', 'PUT', 'PATCH'}
-DEFAULT_LIMIT = 80
+DEFAULT_LIMIT = 50
 
 
 def int_or_none(x):
