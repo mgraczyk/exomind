@@ -6,7 +6,7 @@ from app.review import Review
 
 def compute_stats_for_profile(me_id, user_id):
   user_reviews = Review.objects.with_me_data(
-      me_id=me_id, user_id=user_id, order_by='rating DESC, time DESC')
+      me_id=me_id, user_id=user_id, order_by='COALESCE(rating, 0) DESC, time DESC')
 
   reviews_by_host = defaultdict(list)
   for r in user_reviews:
