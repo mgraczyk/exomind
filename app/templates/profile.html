@@ -7,6 +7,11 @@
   <h3>@{{profile_user.username}}</h3>
   {% if me.id == profile_user.id %}
     <a
+      href="{% url 'edit_profile' %}"
+      class="btn-floating btn-large waves-effect waves-light red">
+      <i class="large material-icons">edit</i>
+    </a>&nbsp;
+    <a
       href="{% url 'new_review' %}"
       class="btn-floating btn-large waves-effect waves-light red">
       <i class="large material-icons">add</i>

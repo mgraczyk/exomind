@@ -1,6 +1,7 @@
 from django.urls import path, register_converter
 
 import app.site as sv
+import app.user_views as uv
 import app.admin as av
 from utils.django_helpers import B64IDConverter
 
@@ -22,4 +23,5 @@ urlpatterns = [
     path('profiles/<b64id:user_id>', sv.profile_view, name='profile_view'),
     path('admin', av.admin_view, name='admin'),
     path('admin/scrape', av.admin_scrape_view, name='admin_scrape'),
+    path('profiles/me/edit', uv.profile_edit_view, name='edit_profile')
 ]
