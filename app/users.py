@@ -1,7 +1,7 @@
 import uuid
 from django.db import models, IntegrityError
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
-from django.contrib.postgres.fields.citext import CIEmailField
+from django.contrib.postgres.fields.citext import CIEmailField, CITextField
 
 from utils.fields import B64IDField
 
@@ -26,7 +26,7 @@ class User(AbstractBaseUser):
 
   id = B64IDField(primary_key=True, editable=False)
   email = CIEmailField(max_length=255, unique=True)
-  username = CIEmailField(max_length=255, unique=True)
+  username = CITextField(max_length=255, unique=True)
 
   is_active = True
 
