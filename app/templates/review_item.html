@@ -32,6 +32,11 @@
     {% endfor %}
     {% endif %}
 
+    {% if review.comments.explicit %}
+    <br>
+    {{ review.comments.explicit|length }} comment{{ review.comments.explicit|length|pluralize }}
+    {% endif %}
+
     <br>
     <form class="EXM-like-form" method="POST" action="{% url 'react_to_review' review_id=review.id %}">
       {% csrf_token %}
