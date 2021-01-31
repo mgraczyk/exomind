@@ -174,7 +174,7 @@ def comment_on_review_view(request, review_id):
     return HttpResponseRedirect('/login')
 
   if request.method != 'POST':
-    raise HttpResponseForbidden()
+    return HttpResponseForbidden()
 
   data = request.POST
   if not data.get('text'):
