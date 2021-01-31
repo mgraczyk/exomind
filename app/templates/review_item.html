@@ -19,25 +19,24 @@
       {% if review.name %}{{review.name}}{%else%}no title{%endif%}
     </em></h6>
     {{review.url|nice_urlize:60}}
-    <br>
     <a href="/profiles/{{review.user.id}}">@{{review.user.username}}</a>
     {{ review.time|naturaltime }}
+    <hr>
 
     {% if review.reaction_data.explicit %}
-    <br>
     Liked by
     {% for reaction in review.reaction_data.explicit %}
       <a href="/profiles/{{reaction.user_id}}">@{{reaction.username}}</a>
       {% if not forloop.last %}, {% endif %}
     {% endfor %}
+    <br>
     {% endif %}
 
     {% if review.comments.explicit %}
-    <br>
     {{ review.comments.explicit|length }} comment{{ review.comments.explicit|length|pluralize }}
+    <br>
     {% endif %}
 
-    <br>
     <form class="EXM-like-form" method="POST" action="{% url 'react_to_review' review_id=review.id %}">
       {% csrf_token %}
       <button type="submit" class="btn-flat waves-effect waves-light hvr-gray">Like</button>
