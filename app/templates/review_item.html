@@ -11,7 +11,13 @@
       {% endif %}
       </div>
     <div title="Rating {{review.rating}}">
-      <i class="material-icons tiny" style="word-spacing: -5px">{{review.rating|star_string}}</i>
+      {% if review.rating == None %}
+        <i class="material-icons tiny"
+           style="letter-spacing: -0.2em; visibility: hidden">{{0|star_string}}</i>
+      {% else %}
+        <i class="material-icons tiny"
+           style="letter-spacing: -0.2em">{{review.rating|star_string}}</i>
+      {% endif %}
     </div>
   </div>
   <div class="EXM-review-item__right">
