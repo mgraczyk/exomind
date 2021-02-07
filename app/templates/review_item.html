@@ -43,9 +43,15 @@
     <br>
     {% endif %}
 
-    <form class="EXM-like-form" method="POST" action="{% url 'react_to_review' review_id=review.id %}">
+    <form class="EXM-like-form {% if review.me.reaction_type %}liked{% endif %}"
+          method="POST"
+          action="{% url 'react_to_review' review_id=review.id %}">
       {% csrf_token %}
-      <button type="submit" class="btn-flat waves-effect waves-light hvr-gray">Like</button>
+      {% if review.me.reaction_type %}
+        <button type="submit" class="btn-flat waves-effect waves-light hvr-gray">Unlike</button>
+      {% else %}
+        <button type="submit" class="btn-flat waves-effect waves-light hvr-gray">Like</button>
+      {% endif %}
     </form>
     <a class="btn-flat hvr-gray" href="{% url 'full_review' review_id=review.id %}">See More...</a>
     {% if review.user.id == me.id %}

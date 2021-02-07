@@ -40,7 +40,11 @@
           method="POST"
           action="{% url 'react_to_review' review_id=review.id %}?full=1">
       {% csrf_token %}
-      <button type="submit" class="btn-flat waves-effect waves-light hvr-gray">Like</button>
+      {% if review.me.reaction_type %}
+        <button type="submit" class="btn-flat waves-effect waves-light hvr-gray">Unlike</button>
+      {% else %}
+        <button type="submit" class="btn-flat waves-effect waves-light hvr-gray">Like</button>
+      {% endif %}
     </form>
 
     {% if review.user.id == me.id %}
