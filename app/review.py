@@ -68,8 +68,8 @@ class ReviewManager(models.Manager):
 
     query = f"""
         SELECT {select_cols} FROM {review_table}
-        LEFT JOIN {user_table} on {user_table}.id={review_table}.user_id
-        LEFT JOIN {reviewable_table} on {reviewable_table}.id={review_table}.reviewable_id
+        JOIN {user_table} on {user_table}.id={review_table}.user_id
+        JOIN {reviewable_table} on {reviewable_table}.id={review_table}.reviewable_id
         LEFT OUTER JOIN (
           SELECT entity_id, type as reaction_type
           FROM {reaction_table}

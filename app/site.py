@@ -98,8 +98,17 @@ def profile_view(request, user_id, review_id=None):
 
 
 def full_review_view(request, review_id):
+  review = Review.objects.with_me_data(me_id=request.user.id, id=review_id)[0]
+
+  # TODO: Privacy?
+  related_reviews = list(
+      Review.objects.filter(reviewable_id=review.reviewable_id
+        ).exclude(id=review.id).select_related('user')
+  )
+
   context = {
-      'review': Review.objects.with_me_data(me_id=request.user.id, id=review_id)[0],
+      'review': review,
+      'related_reviews': related_reviews,
   }
   return render_with_globals(request, 'full_review.html', context)
 

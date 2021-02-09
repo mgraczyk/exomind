@@ -13,7 +13,7 @@
   <p>
     {{review.url|nice_urlize:60}}
     <br>
-    Created by
+    Reviewed by
     <a href="/profiles/{{review.user.id}}">@{{review.user.username}}</a>
     {{review.time|naturaltime }}
   </p>
@@ -22,9 +22,21 @@
     <i class="material-icons tiny" style="word-spacing: -5px">{{review.rating|star_string}}</i>
   </div>
 
+  {% if review.text %}
   <p>
     {{review.text}}
   </p>
+  {% endif %}
+
+  {% if related_reviews|length %}
+  <div>
+    Also reviewed by
+      {% for related_review in related_reviews %}
+        <a href="{% url 'full_review' review_id=related_review.id %}">@{{related_review.user.username}}</a>
+        {% if not forloop.last %}, {% endif %}
+      {% endfor %}
+  </div>
+  {% endif %}
 
   {% if review.reaction_data.explicit %}
   Liked by
