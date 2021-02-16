@@ -9,6 +9,7 @@ class Reaction(models.Model):
   entity_id = B64IDField()
 
   type = models.PositiveSmallIntegerField(default=0)
+  created_at = models.DateTimeField(auto_now_add=True)
 
   class Meta:
     indexes = (models.Index(fields=('entity_id',)),)
