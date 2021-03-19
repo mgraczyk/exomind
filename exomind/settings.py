@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.humanize',
     'app',
+    'crawler',
     'social_django',
     'raven.contrib.django.raven_compat',
 ]
@@ -64,7 +65,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'exomind.crawler_middleware.CrawlerMiddleware',
+    'crawler.middleware.CrawlerMiddleware',
 ]
 
 ROOT_URLCONF = 'exomind.urls'

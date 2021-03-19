@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{page_title}}</title>
+    <meta property="og:url" content="{{og_url}}" />
+    <meta property="og:type" content="{{og_type|default_if_none:'website'}}" />
+    <meta property="og:title" content="{{og_title}}" />
+    <meta property="og:description" content="{{og_description}}" />
+    <meta property="og:image" content="{{og_image}}" />
+    {% if og_profile_username %}<meta property="profile:username" content="{{og_profile_username}}" />{% endif %}
+    {% if facebook_app_id %}<meta property="fb:app_id" content="{{facebook_app_id}}" />{% endif %}
+
+    {% if json_ld_snippet %}
+    <script type="application/ld+json">
+      {{json_ld_snippet|safe}}
+    </script>
+    {% endif %}
+  </head>
+
+  <script>
+    window.location.replace('/');
+  </script>
+
+  <body>
+    <a href="/" target="_self">Click here if your browser does not automatically redirect.</a>
+  </body>
+</html>
