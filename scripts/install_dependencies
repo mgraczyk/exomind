@@ -6,6 +6,6 @@ yum -y install python37 python37-virtualenv
 yum -y install python37-pip
 python3.7 -m pip install virtualenv
 cd /home/ec2-user
-virtualenv .venv3
-source .venv3/bin/activate
+virtualenv .venv
+source .venv/bin/activate
 pip install -r requirements.txt

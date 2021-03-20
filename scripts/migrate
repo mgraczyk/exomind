@@ -1,4 +1,4 @@
 test -f /home/ec2-user/.env.prod.sh && source /home/ec2-user/.env.prod.sh
 cd /home/ec2-user
-source .venv3/bin/activate
+source .venv/bin/activate
 python manage.py migrate
