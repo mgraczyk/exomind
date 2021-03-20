@@ -103,7 +103,7 @@ def full_review_view(request, review_id):
 
   if request.is_crawler:
     star_str = f"{review.rating}-star " if review.rating is not None else ""
-    render_crawler_page(request, {
+    return render_crawler_page(request, {
       'og_title': f"Read {review.user.username}'s review on exomind!",
       'og_description': f"{star_str} review of {shorten(review.name)}.",
       'og_image': review.reviewable.image_url,
