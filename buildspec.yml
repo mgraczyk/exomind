@@ -34,7 +34,7 @@ artifacts:
     - 'test/**/*'
     - 'static/**/*'
     - 'scripts/**/*'
-    - 'crawlers/**/*'
+    - 'crawler/**/*'
     - 'appspec.yml'
     - 'manage.py'
     - 'requirements.txt'
