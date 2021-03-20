@@ -9,6 +9,7 @@ phases:
   install:
     commands:
       # Install dependencies needed for running tests
+      - pip install --upgrade pip
       - pip install -r requirements.txt
 
   pre_build:
@@ -33,6 +34,7 @@ artifacts:
     - 'test/**/*'
     - 'static/**/*'
     - 'scripts/**/*'
+    - 'crawlers/**/*'
     - 'appspec.yml'
     - 'manage.py'
     - 'requirements.txt'

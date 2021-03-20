@@ -9,6 +9,8 @@ files:
    destination: /home/ec2-user/utils
  - source: /common/
    destination: /home/ec2-user/common
+ - source: /crawler/
+   destination: /home/ec2-user/crawler
  - source: /static/
    destination: /home/ec2-user/static
  - source: /test/
