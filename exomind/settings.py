@@ -35,6 +35,7 @@ else:
   # Get git sha from build.
   release_name = 'TODO'
 
+SITE_URL = os.getenv('SITE_ENV')
 
 # Application definition
 

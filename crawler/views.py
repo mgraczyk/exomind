@@ -18,7 +18,7 @@ def render_crawler_page(request, params):
     return render(
         request, 'crawler_page.html', {
             'page_title': _COMPANY_NAME,
-            'og_url': settings.CLIENT_URL.rstrip('/') + request.path,
+            'og_url': f"{(settings.SITE_URL or request.META['HTTP_HOST']).rstrip('/')}/{request.path}",
             'facebook_app_id': os.getenv('FACEBOOK_APP_ID'),
             'og_type': 'website',
             **params,
