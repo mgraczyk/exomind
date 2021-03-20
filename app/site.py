@@ -9,6 +9,7 @@ from app.profile import compute_stats_for_profile
 from app.reactions import Reaction
 from app.comment import Comment
 from app.review import Review
+from crawler.views import render_crawler_page, shorten
 from utils import AttributeDict
 
 CREATE_OR_UPDATE_METHODS = {'POST', 'PUT', 'PATCH'}
@@ -99,6 +100,14 @@ def profile_view(request, user_id, review_id=None):
 
 def full_review_view(request, review_id):
   review = Review.objects.with_me_data(me_id=request.user.id, id=review_id)[0]
+
+  if request.is_crawler:
+    star_str = f"{review.rating}-star " if review.rating is not None else ""
+    render_crawler_page(request, {
+      'og_title': f"Read {review.user.username}'s review on exomind!",
+      'og_description': f"{star_str} review of {shorten(review.name)}.",
+      'og_image': review.reviewable.image_url,
+    })
 
   # TODO: Privacy?
   related_reviews = list(

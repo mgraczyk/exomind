@@ -12,3 +12,4 @@ class CrawlerMiddleware:
 
   def __call__(self, request):
     request.is_crawler = _SHARE_CRAWLER_UA.match(request.META.get('HTTP_USER_AGENT', ''))
+    return self.get_response(request)
